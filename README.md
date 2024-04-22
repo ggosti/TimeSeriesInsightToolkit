@@ -25,7 +25,7 @@ dependencies:
 
 to install dependencis with conda:
 ```
-conda env create -f environments.yml
+conda env create -f environment.yml
 ```
 
 ### Test

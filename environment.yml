@@ -1,0 +1,13 @@
+name: mat
+channels:
+  - defaults
+dependencies:
+  - jupyter
+  - numpy
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
+  - ipympl
+  - seaborn
+  - voila
