@@ -95,3 +95,7 @@ python generate-kde.py --path path/to/group/folder --opath path/to/group/ --dir 
 ### Agglomerative clustering
 
 `pos-clustering-kde.ipynb` and `panoramic-clustering-kde.ipynb` are Jupyter notebooks for applying agglomerative clustering on records kde.
+
+### K-means
+
+Compute k-means on records. 
