@@ -203,7 +203,7 @@ def allPaths2D(paths,largerThan=0,ax=None,yup=True):
         fig = plt.figure()
         ax = fig.add_subplot()
     for path in paths:
-        print(path)
+        #print(path)
         if len(path) > largerThan:
             t,x,y,z = path.T
             if yup:
