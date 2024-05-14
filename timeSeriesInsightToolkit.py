@@ -198,13 +198,21 @@ def drawPath2DT(path,dpath=None,BBox=None,ax=None,yup=True,scale=None,colorbar=F
         #if isinstance(BBox , dict):
         #    setAxLim2BBox(ax,BBox,yup=False)
 
-def allPaths2D(xs,ys,largerThan=0,ax=None):
+def allPaths2D(paths,largerThan=0,ax=None,yup=True):
     if ax == None:
         fig = plt.figure()
         ax = fig.add_subplot()
-    for x,y in zip(xs,ys):
+    for paths in zip(paths):
         if len(x) > largerThan:
-            ax.scatter(x,y,s=1)
+            t,x,y,z = path.T
+            if yup:
+                ax.scatter(x,z,s=1)
+                ax.set_xlabel('x')
+                ax.set_ylabel('z')
+            else:
+                ax.scatter(x,y,s=1)
+                ax.set_xlabel('x')
+                ax.set_ylabel('y')
         
 #def allPaths3D(xs,ys,zs,largerThan=0,ax=None):
 #    if ax == None:

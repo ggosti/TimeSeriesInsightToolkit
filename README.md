@@ -98,4 +98,12 @@ python generate-kde.py --path path/to/group/folder --opath path/to/group/ --dir 
 
 ### K-means
 
+`pos-k-means.ipynb` are Jupyter notebooks for applying k-means to the record varaibles.
+
+
+### Gaussian mixture morel
+
+`pos-gmm.ipynb` are Jupyter notebooks for applying k-means to the record varaibles.
+
+
 Compute k-means on records. 
