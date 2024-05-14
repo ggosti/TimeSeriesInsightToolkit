@@ -202,8 +202,9 @@ def allPaths2D(paths,largerThan=0,ax=None,yup=True):
     if ax == None:
         fig = plt.figure()
         ax = fig.add_subplot()
-    for paths in zip(paths):
-        if len(x) > largerThan:
+    for path in zip(paths):
+        print(path)
+        if len(path) > largerThan:
             t,x,y,z = path.T
             if yup:
                 ax.scatter(x,z,s=1)
