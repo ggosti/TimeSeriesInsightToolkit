@@ -252,6 +252,8 @@ def plotKDE(x,y,z,density,yup=True,ax=None):
     if ax == None:
         fig = plt.figure()
         ax = fig.add_subplot(projection='3d')
+    else:
+        ax.get_figure(self)
     if yup:
         sc = ax.scatter(x,z,y,c=density,s=1)
         fig.colorbar(sc, ax=ax)
