@@ -248,9 +248,10 @@ def allPaths3D(paths,largerThan=0,ax=None,yup=True):
         ax.set_zlabel('z')
 
 
-def plotKDE(x,y,z,density,yup=True):
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
+def plotKDE(x,y,z,density,yup=True,ax=None):
+    if ax == None:
+        fig = plt.figure()
+        ax = fig.add_subplot(projection='3d')
     if yup:
         sc = ax.scatter(x,z,y,c=density,s=1)
         fig.colorbar(sc, ax=ax)
