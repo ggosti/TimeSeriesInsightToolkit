@@ -1222,9 +1222,8 @@ def write2D_KDE_tojson(kde, BBox, width, recordsFolderName, records, filename, n
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(occDict, f, ensure_ascii=False, indent=4)
 
-# TODO: fare questa
-def write2D_kmeans_KDE_tojson(kde, BBox, width, width_2d_kde, kmeans, recordsFolderName, records, filename, npoints=800):
-    xedges, yedges, zedges  = makeBinsEdges(BBox,width=.1)
+def write2D_kmeans_KDE_tojson(kde, BBox, width, kmeans, recordsFolderName, records, filename, npoints=800):
+    xedges, yedges, zedges  = tsi.makeBinsEdges(BBox,width=.1)
     Xc, Zc = np.meshgrid((xedges[1:]+xedges[:-1])*0.5, (zedges[1:]+zedges[:-1])*0.5, indexing='xy')
     xc, zc = Xc.flatten(), Zc.flatten()
     xz = np.vstack([xc, zc])
@@ -1237,16 +1236,19 @@ def write2D_kmeans_KDE_tojson(kde, BBox, width, width_2d_kde, kmeans, recordsFol
     #print('dataSorted',dataSorted.shape,dataSorted.dtype)
     dataSorted = dataSorted[:npoints]#.astype(np.float16)
     #print('dataSorted',dataSorted.shape,dataSorted.dtype)
-    labels = kmeans.predict(data[:,:2])
+    labels = kmeans.predict(dataSorted[:,:2])
+    #print(labels,labels.shape,data.shape)
+    #print(np.unique(labels))
 
     dataOcc = []
-    for cl in clusters:
-        dataSortedCl=[[x,z,o] for l,(x,z,o) in zip(labels,dataSortedCl) if l == cl]
+    for cl in range(kmeans.n_clusters):
+        dataSortedCl=[[x,z,o] for l,(x,z,o) in zip(labels,dataSorted) if l == cl]
         dataOcc.append( { 'cluster':cl,  'points' : [{'x':x,'z':z,'density':o} for x,z,o in dataSortedCl] })
     occDict = {'records folder':recordsFolderName,'records':records,'bbox':BBox,'voxelsize':width,'clusters':dataOcc}
-
+    
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(occDict, f, ensure_ascii=False, indent=4)
+    return occDict
 
 def dir_path(string):
     if os.path.isdir(string):
