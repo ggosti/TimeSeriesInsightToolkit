@@ -1237,10 +1237,12 @@ def write2D_kmeans_KDE_tojson(kde, BBox, width, width_2d_kde, kmeans, recordsFol
     #print('dataSorted',dataSorted.shape,dataSorted.dtype)
     dataSorted = dataSorted[:npoints]#.astype(np.float16)
     #print('dataSorted',dataSorted.shape,dataSorted.dtype)
+    labels = kmeans.predict(data[:,:2])
 
     dataOcc = []
     for cl in clusters:
-        dataOcc.append( { 'cluster'=cl,  'points' = {'x':x,'z':z,'density':o} for x,z,o in dataSorted })
+        dataSortedCl=[[x,z,o] for l,(x,z,o) in zip(labels,dataSortedCl) if l == cl]
+        dataOcc.append( { 'cluster':cl,  'points' : [{'x':x,'z':z,'density':o} for x,z,o in dataSortedCl] })
     occDict = {'records folder':recordsFolderName,'records':records,'bbox':BBox,'voxelsize':width,'clusters':dataOcc}
 
     with open(filename, 'w', encoding='utf-8') as f:
