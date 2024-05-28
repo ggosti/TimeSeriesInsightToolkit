@@ -1223,7 +1223,7 @@ def write2D_KDE_tojson(kde, BBox, width, recordsFolderName, records, filename, n
         json.dump(occDict, f, ensure_ascii=False, indent=4)
 
 def write2D_kmeans_KDE_tojson(kde, BBox, width, kmeans, recordsFolderName, records, filename, npoints=800):
-    xedges, yedges, zedges  = tsi.makeBinsEdges(BBox,width=.1)
+    xedges, yedges, zedges  = makeBinsEdges(BBox,width=.1)
     Xc, Zc = np.meshgrid((xedges[1:]+xedges[:-1])*0.5, (zedges[1:]+zedges[:-1])*0.5, indexing='xy')
     xc, zc = Xc.flatten(), Zc.flatten()
     xz = np.vstack([xc, zc])
