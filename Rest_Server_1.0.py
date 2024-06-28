@@ -28,8 +28,9 @@ def addizione():
     somma = data['numero1'] + data['numero2']
     return jsonify({'risultato': somma})
 
-@app.route('/duration/variance/<path>', methods=['GET'])
+@app.route('/measure/duration/variance/<path>', methods=['GET'])
 def show_duration_varaince(path):
+    pathSes = '/var/www/html/records/'+path
     # parse path to records
     if '/' == pathSes[-1]:
         pathSes = pathSes[:-1] #takeout the slash and than the folder name
