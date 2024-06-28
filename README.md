@@ -41,6 +41,8 @@ To test script in verbose mode
 python -m doctest -v timeSeriesInsightToolkit.py
 ```
 
+## Usage
+
 ### Run Preprocessing
 
 To run preprocessing, you can get a voila session started:
@@ -107,3 +109,18 @@ python generate-kde.py --path path/to/group/folder --opath path/to/group/ --dir 
 
 
 Compute k-means on records. 
+
+
+## Rest API (Experimental)
+
+Implemented smple Rest APT.
+
+Get measures of time dustation and variance for each record.
+```
+http://<ipaddress>:<port>/measure/duration/variance/<group>/<subgroup>
+```
+
+Plot scatter plot of time dustation and variance.
+```
+http://<ipaddress>:<port>/scatter/duration/variance/<group>/<subgroup>
+```
