@@ -88,26 +88,28 @@ def scatter_duration_varaince(group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     #return jsonify({'path':path})
     dictDurVar = measureDurationVariance(path)
+    totTimes = dictDurVar['duration']
+    totVars = dictDurVar['variance']
+
+    thTime = 35
+    thVar = 0.1#1.#0.1#1.#0.4 #2.5
+
     # Generate the figure **without using pyplot**.
-    fig = Figure()
-    f,axs = fig.subplots(2,2,figsize=(10,10))
+    fig = Figure(figsize=(10,10))
+    axs = fig.subplots(2,2)
 
     timeBins = np.linspace(0,np.max(totTimes)*1.1,100)
     varBins = np.linspace(0,np.max(totVars)*1.1,100)
 
-    if isinstance(pathSes2, str): axs[0,0].hist(totTimes2,bins=timeBins)
     axs[0,0].hist(totTimes,bins=timeBins)
     axs[0,0].axvline(thTime,color='gray')
     axs[0,0].set_xlabel('session time (s)')
 
-
-    if isinstance(pathSes2, str): axs[1,1].hist(totVars2,bins=varBins)
     axs[1,1].hist(totVars,bins=varBins)
     axs[1,1].axvline(thVar,color='gray')
     axs[1,1].set_xlabel('variance')
 
     #plt.figure()
-    if isinstance(pathSes2, str): axs[1,0].scatter(totTimes2,totVars2)
     axs[1,0].scatter(totTimes,totVars)
     axs[1,0].axvline(thTime,color='gray')
     axs[1,0].axhline(thVar,color='gray')
