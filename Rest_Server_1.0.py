@@ -103,4 +103,4 @@ if __name__ == '__main__':
     #path = 'proc/bfanini-20231026-kjtgo0m0w/preprocessed-VR-sessions'
     #result = measureDurationVariance(path)
     #print(result)
-    app.run(host='localhost', port=9874, debug=True)
+    app.run(host='192.167.233.88', port=8087),# debug=True)
