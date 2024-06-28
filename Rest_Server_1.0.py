@@ -90,8 +90,32 @@ def scatter_duration_varaince(group1,group2):
     dictDurVar = measureDurationVariance(path)
     # Generate the figure **without using pyplot**.
     fig = Figure()
-    ax = fig.subplots()
-    ax.plot([1, 2])
+    f,axs = fig.subplots(2,2,figsize=(10,10))
+
+    timeBins = np.linspace(0,np.max(totTimes)*1.1,100)
+    varBins = np.linspace(0,np.max(totVars)*1.1,100)
+
+    if isinstance(pathSes2, str): axs[0,0].hist(totTimes2,bins=timeBins)
+    axs[0,0].hist(totTimes,bins=timeBins)
+    axs[0,0].axvline(thTime,color='gray')
+    axs[0,0].set_xlabel('session time (s)')
+
+
+    if isinstance(pathSes2, str): axs[1,1].hist(totVars2,bins=varBins)
+    axs[1,1].hist(totVars,bins=varBins)
+    axs[1,1].axvline(thVar,color='gray')
+    axs[1,1].set_xlabel('variance')
+
+    #plt.figure()
+    if isinstance(pathSes2, str): axs[1,0].scatter(totTimes2,totVars2)
+    axs[1,0].scatter(totTimes,totVars)
+    axs[1,0].axvline(thTime,color='gray')
+    axs[1,0].axhline(thVar,color='gray')
+    axs[1,0].set_xlabel('session time (s)')
+    axs[1,0].set_ylabel('variance')
+    axs[1,0].set_xlim((timeBins[0],timeBins[-1]))
+    axs[1,0].set_ylim((varBins[0],varBins[-1]))
+
     # Save it to a temporary buffer.
     buf = BytesIO()
     fig.savefig(buf, format="png")
