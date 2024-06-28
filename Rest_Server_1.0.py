@@ -1,5 +1,9 @@
+import base64
+from io import BytesIO
+
 from flask import Flask, jsonify, request
 import numpy as np
+from matplotlib.figure import Figure
 
 import timeSeriesInsightToolkit as tsi
 
@@ -78,6 +82,22 @@ def measure_duration_varaince(group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     #return jsonify({'path':path})
     return jsonify(measureDurationVariance(path))
+
+@app.route('/scatter/duration/variance/<group1>/<group2>', methods=['GET'])
+def scatter_duration_varaince(group1,group2):
+    path = f'{group1}/{group2}/preprocessed-VR-sessions'
+    #return jsonify({'path':path})
+    dictDurVar = measureDurationVariance(path)
+    # Generate the figure **without using pyplot**.
+    fig = Figure()
+    ax = fig.subplots()
+    ax.plot([1, 2])
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    # Embed the result in the html output.
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return f"<img src='data:image/png;base64,{data}'/>"
 
 if __name__ == '__main__':
     #path = 'proc/bfanini-20231026-kjtgo0m0w/preprocessed-VR-sessions'
