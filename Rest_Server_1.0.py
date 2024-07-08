@@ -118,7 +118,7 @@ def scatterPlot(var1,var2,th1,th2):
 #    #return jsonify({'path':path})
 #    return jsonify(measureDurationVariance(path))
 
-@app.route('/measure/<group1>/<group2>/duration/variance', methods=['GET'])
+@app.route('/<group1>/<group2>/duration/variance', methods=['GET'])
 def measure_duration_varaince(group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     #return jsonify({'path':path})
