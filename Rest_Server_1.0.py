@@ -125,6 +125,23 @@ def get_record_vars(group1,group2,record):
         path = path + '/preprocessed-VR-sessions'
     pathSesRec = '/var/www/html/records/'+path
     # get variables from records    
+    #ids, fileNames, dfSs, df = tsi.readData(pathSesRec)
+    dfS = tsi.readSessionData(pathSesRec,record)
+
+    print(record)
+    #dfS = dfSs[fileNames == record]
+    print(dfS)
+    
+    return jsonify({'dfS':dfS.to_dict('records'),'record':record})
+
+
+@app.route('/<group1>/<group2>/<record>/plot', methods=['GET'])
+def get_record_vars_plot(group1,group2,record):
+    path = f'{group1}/{group2}'
+    if group1 == 'proc':
+        path = path + '/preprocessed-VR-sessions'
+    pathSesRec = '/var/www/html/records/'+path
+    # get variables from records    
     ids, fileNames, dfSs, df = tsi.readData(pathSesRec)
 
     print(record)
@@ -137,7 +154,6 @@ def get_record_vars(group1,group2,record):
     dpath = tsi.getPath(dfS,['dirx','diry','dirz'])
 
     return jsonify({'dfS':dfS.to_dict('records'),'record':record,'nav':nav.tolist()})
-
 
 
 #
