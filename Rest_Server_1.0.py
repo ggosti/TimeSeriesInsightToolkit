@@ -80,6 +80,33 @@ def measureVariance(path):
 def measureDurationVariance(path):
     return {'duration': measureDuration(path),'variance': measureVariance(path)}
 
+# generate scatter plot for rest API call
+def scatterPlot(var1,var2,th1,th2):
+    # Generate the figure **without using pyplot**.
+    fig = Figure(figsize=(10,10))
+    axs = fig.subplots(2,2)
+
+    var1Bins = np.linspace(0,np.max(var1)*1.1,100)
+    var2Bins = np.linspace(0,np.max(var2)*1.1,100)
+
+    axs[0,0].hist(var1,bins=var1Bins)
+    axs[0,0].axvline(th1,color='gray')
+    axs[0,0].set_xlabel('session time (s)')
+
+    axs[1,1].hist(var2,bins=var2Bins)
+    axs[1,1].axvline(th2,color='gray')
+    axs[1,1].set_xlabel('variance')
+
+    #plt.figure()
+    axs[1,0].scatter(var1,var2)
+    axs[1,0].axvline(th1,color='gray')
+    axs[1,0].axhline(th2,color='gray')
+    axs[1,0].set_xlabel('session time (s)')
+    axs[1,0].set_ylabel('variance')
+    axs[1,0].set_xlim((var1Bins[0],var1Bins[-1]))
+    axs[1,0].set_ylim((var2Bins[0],var2Bins[-1]))
+    return fig
+
 # function that generates REST API to measure duration and variance
 #@app.route('/measure/duration/variance/', methods=['GET'])
 #def measure_duration_varaince():
@@ -107,42 +134,34 @@ def measure(measure,group1,group2):
     return jsonify(measures)
 
 
-def scatterPlot(var1,var2,th1,th2):
-    # Generate the figure **without using pyplot**.
-    fig = Figure(figsize=(10,10))
-    axs = fig.subplots(2,2)
+# # scatter plot of duration and variance
+# @app.route('/scatter/duration/variance/<group1>/<group2>', methods=['GET'])
+# def scatter_duration_varaince(group1,group2):
+#     path = f'{group1}/{group2}/preprocessed-VR-sessions'
+#     totTimes = measureDuration(path)
+#     totVars = measureVariance(path)
 
-    var1Bins = np.linspace(0,np.max(var1)*1.1,100)
-    var2Bins = np.linspace(0,np.max(var2)*1.1,100)
+#     thTime = 35
+#     thVar = 0.1 #1. #0.1 #1. #0.4 #2.5
+#     fig = scatterPlot(totTimes,totVars,thTime,thVar)
 
-    axs[0,0].hist(var1,bins=var1Bins)
-    axs[0,0].axvline(th1,color='gray')
-    axs[0,0].set_xlabel('session time (s)')
+#     # Save it to a temporary buffer.
+#     buf = BytesIO()
+#     fig.savefig(buf, format="png")
+#     # Embed the result in the html output.
+#     data = base64.b64encode(buf.getbuffer()).decode("ascii")
+#     return f"<img src='data:image/png;base64,{data}'/>"
 
-    axs[1,1].hist(var2,bins=var2Bins)
-    axs[1,1].axvline(th2,color='gray')
-    axs[1,1].set_xlabel('variance')
-
-    #plt.figure()
-    axs[1,0].scatter(var1,var2)
-    axs[1,0].axvline(th1,color='gray')
-    axs[1,0].axhline(th2,color='gray')
-    axs[1,0].set_xlabel('session time (s)')
-    axs[1,0].set_ylabel('variance')
-    axs[1,0].set_xlim((var1Bins[0],var1Bins[-1]))
-    axs[1,0].set_ylim((var2Bins[0],var2Bins[-1]))
-    return fig
-
-# scatter plot of duration and variance
-@app.route('/scatter/duration/variance/<group1>/<group2>', methods=['GET'])
-def scatter_duration_varaince(group1,group2):
+# scatter plot of two defined vairables
+@app.route('/scatter/<var1>/<var2>/<group1>/<group2>', methods=['GET'])
+def scatter_duration_varaince(var1,var2,group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
-    totTimes = measureDuration(path)
-    totVars = measureVariance(path)
+    if var1 == 'duration': var1 = measureDuration(path)
+    if var2 == 'variance': var2 = measureVariance(path)
 
     thTime = 35
     thVar = 0.1 #1. #0.1 #1. #0.4 #2.5
-    fig = scatterPlot(totTimes,totVars,thTime,thVar)
+    fig = scatterPlot(var1,var2,thTime,thVar)
 
     # Save it to a temporary buffer.
     buf = BytesIO()
