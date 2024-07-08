@@ -109,7 +109,7 @@ def addizione():
 
 
 @app.route('/<group1>/<group2>', methods=['GET'])
-def get_record(group1,group2):
+def get_records(group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     pathSesRec = '/var/www/html/records/'+path
     # get variables from records    
@@ -117,7 +117,7 @@ def get_record(group1,group2):
     return jsonify({'ids':ids,'fileNames':fileNames})
 
 @app.route('/<group1>/<group2>/<record>', methods=['GET'])
-def get_record(group1,group2,record):
+def get_record_vars(group1,group2,record):
     path = f'{group1}/{group2}'
     if group1 == 'proc':
         path = path + '/preprocessed-VR-sessions'
@@ -134,7 +134,7 @@ def get_record(group1,group2,record):
     fpath = tsi.getPath(dfS,['fx','fy','fz'])
     dpath = tsi.getPath(dfS,['dirx','diry','dirz'])
 
-    return jsonify({'ids':ids,'fileNames':fileNames})
+    return jsonify({'dfS':dfS,'record':record})
 
 
 
