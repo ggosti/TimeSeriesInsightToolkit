@@ -90,17 +90,17 @@ def scatterPlot(var1,var2,th1,th2):
     var2Bins = np.linspace(0,np.max(var2)*1.1,100)
 
     axs[0,0].hist(var1,bins=var1Bins)
-    axs[0,0].axvline(th1,color='gray')
+    if not th1==None: axs[0,0].axvline(th1,color='gray')
     axs[0,0].set_xlabel('session time (s)')
 
     axs[1,1].hist(var2,bins=var2Bins)
-    axs[1,1].axvline(th2,color='gray')
+    if not th2==None: axs[1,1].axvline(th2,color='gray')
     axs[1,1].set_xlabel('variance')
 
     #plt.figure()
     axs[1,0].scatter(var1,var2)
-    axs[1,0].axvline(th1,color='gray')
-    axs[1,0].axhline(th2,color='gray')
+    if not th1 == None: axs[1,0].axvline(th1,color='gray')
+    if not th2 == None: axs[1,0].axhline(th2,color='gray')
     axs[1,0].set_xlabel('session time (s)')
     axs[1,0].set_ylabel('variance')
     axs[1,0].set_xlim((var1Bins[0],var1Bins[-1]))
@@ -204,6 +204,7 @@ def getVarPars(filters,path,varKey):
     if not (varKey in filters):
         print('error missin '+varKey) 
     else:
+        th = None
         print(filters[varKey])
         splitStr = filters[varKey].split('>')
         if 'duration' in splitStr: 
