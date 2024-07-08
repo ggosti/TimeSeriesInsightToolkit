@@ -136,7 +136,7 @@ def measure(measure,group1,group2):
 @app.route('/<group1>/<group2>/measure', methods=['GET'])
 def measure2(group1,group2):
     filters = request.args
-    print('filters',filters)
+    print('filters',filters.keys,filters)
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     if measure == 'duration': measures = measureDuration(path)
     if measure == 'variance': measures = measureVariance(path)
