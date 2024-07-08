@@ -138,12 +138,12 @@ def measure2(group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     
     filters = request.args.to_dict()
-    keys = filters.keys().to_list()
-    print('filters',keys,filters)
+    #keys = filters.keys()
+    print('filters',filters)
     measures = {}
     
-    if 'duration' in keys: measures['duration'] = measureDuration(path)
-    if 'variance' in keys: measures['variance'] = measureVariance(path)
+    if 'duration' in filters: measures['duration'] = measureDuration(path)
+    if 'variance' in filters: measures['variance'] = measureVariance(path)
 
     #return jsonify({'path':path})
     return jsonify(measures)
