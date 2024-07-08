@@ -133,6 +133,17 @@ def measure(measure,group1,group2):
     #return jsonify({'path':path})
     return jsonify(measures)
 
+@app.route('/<group1>/<group2>/measure', methods=['GET'])
+def measure2(group1,group2):
+    filters = request.args
+    print('filters',filters)
+    path = f'{group1}/{group2}/preprocessed-VR-sessions'
+    if measure == 'duration': measures = measureDuration(path)
+    if measure == 'variance': measures = measureVariance(path)
+
+    #return jsonify({'path':path})
+    return jsonify(measures)
+
 
 # # scatter plot of duration and variance
 # @app.route('/scatter/duration/variance/<group1>/<group2>', methods=['GET'])
