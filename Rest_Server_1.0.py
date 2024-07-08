@@ -132,7 +132,7 @@ def measure2(group1,group2):
     #keys = filters.keys()
     print('filters',filters)
     
-    if filters: measures = measureDurationVariance(path) 
+    if not filters: measures = measureDurationVariance(path) 
     else:
         reqMeasures = filters['measures']
         if 'duration' in reqMeasures: measures['duration'] = measureDuration(path)
