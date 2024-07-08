@@ -135,11 +135,15 @@ def measure(measure,group1,group2):
 
 @app.route('/<group1>/<group2>/measure', methods=['GET'])
 def measure2(group1,group2):
-    filters = request.args.to_dict()
-    print('filters',filters.keys(),filters)
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
-    if measure == 'duration': measures = measureDuration(path)
-    if measure == 'variance': measures = measureVariance(path)
+    
+    filters = request.args.to_dict()
+    keys = filters.keys().to_list()
+    print('filters',keys,filters)
+    measures = {}
+    
+    if 'duration' in keys: measures['duration'] = measureDuration(path)
+    if 'variance' in keys: measures['variance'] = measureVariance(path)
 
     #return jsonify({'path':path})
     return jsonify(measures)
