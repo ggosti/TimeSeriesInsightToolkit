@@ -170,6 +170,25 @@ def scatter_duration_varaince(var1,var2,group1,group2):
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
     return f"<img src='data:image/png;base64,{data}'/>"
 
+
+# scatter plot of two defined vairables with gatting tresholds
+@app.route('/scatter/<var1>/<var2>/<float:th1>/<float:th2>/<group1>/<group2>', methods=['GET'])
+def scatter_duration_varaince(var1,var2,group1,group2):
+    path = f'{group1}/{group2}/preprocessed-VR-sessions'
+    if var1 == 'duration': var1 = measureDuration(path)
+    if var2 == 'variance': var2 = measureVariance(path)
+
+    th1 = 35
+    th2 = 0.1 #1. #0.1 #1. #0.4 #2.5
+    fig = scatterPlot(var1,var2,th1,th2)
+
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    # Embed the result in the html output.
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return f"<img src='data:image/png;base64,{data}'/>"
+
 if __name__ == '__main__':
     #path = 'proc/bfanini-20231026-kjtgo0m0w/preprocessed-VR-sessions'
     #result = measureDurationVariance(path)
