@@ -116,6 +116,32 @@ def get_record(group1,group2):
     ids, fileNames, dfSs, df = tsi.readData(pathSesRec)
     return jsonify({'ids':ids,'fileNames':fileNames})
 
+@app.route('/<group1>/<group2>/<record>', methods=['GET'])
+def get_record(group1,group2,record):
+    path = f'{group1}/{group2}'
+    if group1 == 'proc':
+        path = path + '/preprocessed-VR-sessions'
+    pathSesRec = '/var/www/html/records/'+path
+    # get variables from records    
+    ids, fileNames, dfSs, df = tsi.readData(pathSesRec)
+
+    print(record)
+    dfS = dfSs[fileNames == record]
+    print(dfS)
+    nav = tsi.getVR(dfS)
+    navAr = tsi.getAR(dfS)
+    path = tsi.getPath(dfS,['posx','posy','posz'])
+    fpath = tsi.getPath(dfS,['fx','fy','fz'])
+    dpath = tsi.getPath(dfS,['dirx','diry','dirz'])
+
+    return jsonify({'ids':ids,'fileNames':fileNames})
+
+
+
+#
+# Gate
+#
+
 @app.route('/<group1>/<group2>/measures', methods=['GET'])
 def measure(group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
