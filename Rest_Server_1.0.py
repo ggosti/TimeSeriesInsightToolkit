@@ -106,40 +106,43 @@ def measure(measure,group1,group2):
     #return jsonify({'path':path})
     return jsonify(measures)
 
-@app.route('/scatter/duration/variance/<group1>/<group2>', methods=['GET'])
-def scatter_duration_varaince(group1,group2):
-    path = f'{group1}/{group2}/preprocessed-VR-sessions'
-    #return jsonify({'path':path})
-    dictDurVar = measureDurationVariance(path)
-    totTimes = dictDurVar['duration']
-    totVars = dictDurVar['variance']
 
-    thTime = 35
-    thVar = 0.1#1.#0.1#1.#0.4 #2.5
-
+def scatterPlot(var1,var2,th1,th2):
     # Generate the figure **without using pyplot**.
     fig = Figure(figsize=(10,10))
     axs = fig.subplots(2,2)
 
-    timeBins = np.linspace(0,np.max(totTimes)*1.1,100)
-    varBins = np.linspace(0,np.max(totVars)*1.1,100)
+    var1Bins = np.linspace(0,np.max(var1)*1.1,100)
+    var2Bins = np.linspace(0,np.max(var2)*1.1,100)
 
-    axs[0,0].hist(totTimes,bins=timeBins)
-    axs[0,0].axvline(thTime,color='gray')
+    axs[0,0].hist(var1,bins=var1Bins)
+    axs[0,0].axvline(th1,color='gray')
     axs[0,0].set_xlabel('session time (s)')
 
-    axs[1,1].hist(totVars,bins=varBins)
-    axs[1,1].axvline(thVar,color='gray')
+    axs[1,1].hist(var2,bins=var2Bins)
+    axs[1,1].axvline(th2,color='gray')
     axs[1,1].set_xlabel('variance')
 
     #plt.figure()
-    axs[1,0].scatter(totTimes,totVars)
-    axs[1,0].axvline(thTime,color='gray')
-    axs[1,0].axhline(thVar,color='gray')
+    axs[1,0].scatter(var1,var2)
+    axs[1,0].axvline(th1,color='gray')
+    axs[1,0].axhline(th2,color='gray')
     axs[1,0].set_xlabel('session time (s)')
     axs[1,0].set_ylabel('variance')
-    axs[1,0].set_xlim((timeBins[0],timeBins[-1]))
-    axs[1,0].set_ylim((varBins[0],varBins[-1]))
+    axs[1,0].set_xlim((var1Bins[0],var1Bins[-1]))
+    axs[1,0].set_ylim((var2Bins[0],var2Bins[-1]))
+    return fig
+
+# scatter plot of duration and variance
+@app.route('/scatter/duration/variance/<group1>/<group2>', methods=['GET'])
+def scatter_duration_varaince(group1,group2):
+    path = f'{group1}/{group2}/preprocessed-VR-sessions'
+    totTimes = measureDuration(path)
+    totVars = measureVariance(path)
+
+    thTime = 35
+    thVar = 0.1 #1. #0.1 #1. #0.4 #2.5
+    fig = scatterPlot(totTimes,totVars,thTime,thVar)
 
     # Save it to a temporary buffer.
     buf = BytesIO()

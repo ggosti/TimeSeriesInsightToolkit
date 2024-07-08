@@ -119,6 +119,10 @@ Get measures of time dustation and variance for each record.
 ```
 http://<ipaddress>:<port>/measure/duration/variance/<group>/<subgroup>
 ```
+Get measures of time of a defined variable for each record, at the moment only doration and variance are implemented.
+```
+http://<ipaddress>:<port>/measure/<measure>/<group>/<subgroup>
+```
 
 Plot scatter plot of time dustation and variance.
 ```
