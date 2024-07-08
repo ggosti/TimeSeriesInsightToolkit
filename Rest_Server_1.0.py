@@ -36,6 +36,46 @@ def addizione():
     return jsonify({'risultato': somma})
 
 
+# function that measures duration
+def measureDuration(path):
+    pathSesRec = '/var/www/html/records/'+path
+
+    # get variables from records    
+    ids, fileNames, dfSs, df = tsi.readData(pathSesRec)
+    #print(dfSs)
+    paths=tsi.getPaths(ids,dfSs,['posx','posy','posz'])
+    _,x,y,z = np.vstack(paths).T
+    #paths = tsi.getPaths(ids,dfSs,['dirx','diry','dirz'])
+    #_,u,v,w = np.vstack(paths).T
+
+    # get durations for each record
+    totTimes = []
+    for path in paths:
+        t,x,y,z = path.T
+        totTime = t[-1]-t[0]
+        totTimes.append(totTime)
+    return totTimes #{'duration': totTimes,'variance': totVars}
+
+# function that measures variance
+def measureVariance(path):
+    pathSesRec = '/var/www/html/records/'+path
+
+    # get variables from records    
+    ids, fileNames, dfSs, df = tsi.readData(pathSesRec)
+    #print(dfSs)
+    paths=tsi.getPaths(ids,dfSs,['posx','posy','posz'])
+    _,x,y,z = np.vstack(paths).T
+    #paths = tsi.getPaths(ids,dfSs,['dirx','diry','dirz'])
+    #_,u,v,w = np.vstack(paths).T
+
+    # get variance for each record
+    totVars = []
+    for path in paths:
+        t,x,y,z = path.T
+        totVar = np.var(x)+np.var(y)+np.var(z)
+        totVars.append(totVar) 
+    return totVar #{'duration': totTimes,'variance': totVars}
+
 # function that measures duration and variance
 def measureDurationVariance(path):
     pathSesRec = '/var/www/html/records/'+path
@@ -82,6 +122,14 @@ def measure_duration_varaince(group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     #return jsonify({'path':path})
     return jsonify(measureDurationVariance(path))
+
+@app.route('/measure/<measure>/<group1>/<group2>', methods=['GET'])
+def measure(measures,group1,group2):
+    path = f'{group1}/{group2}/preprocessed-VR-sessions'
+    if measures == 'duration': measure = measureDuration(path)
+
+    #return jsonify({'path':path})
+    return jsonify(measures)
 
 @app.route('/scatter/duration/variance/<group1>/<group2>', methods=['GET'])
 def scatter_duration_varaince(group1,group2):
