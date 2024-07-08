@@ -205,13 +205,13 @@ def getVarPars(filters,path,varKey):
         print('error missin '+varKey) 
     else:
         print(filters[varKey])
-        varName,th = filters[varKey].split('>')
+        splitStr = filters[varKey].split('>')
         if 'duration' in varName: 
             var = measureDuration(path)
-            th = float(th)
+            if len(splitStr)>1: th = float(splitStr[-1])
         if 'variance' in varName: 
             var = measureVariance(path)
-            th = float(th)
+            if len(splitStr)>1: th = float(splitStr[-1])
         print(var,th)  
     return var,th
 
