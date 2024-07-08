@@ -199,6 +199,7 @@ def scatter_th_api(var1,var2,th1,th2,group1,group2):
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
     return f"<img src='data:image/png;base64,{data}'/>"
 
+
 # scatter plot of two defined vairables with gatting tresholds
 @app.route('/<group1>/<group2>/scatter', methods=['GET'])
 def scatter_th_api2(group1,group2):
@@ -210,9 +211,26 @@ def scatter_th_api2(group1,group2):
         print('error') 
     else:
         print(filters['var1'])
-
-    if var1 == 'duration': var1 = measureDuration(path)
-    if var2 == 'variance': var2 = measureVariance(path)
+        varName,th = filters['var1'].split('>')
+        if 'duration' in varName: 
+            var1 = measureDuration(path)
+            th1 = float(th)
+        if 'variance' in varName: 
+            var1 = measureVariance(path)
+            th1 = float(th)
+    
+    if not ('var2' in filters):
+        print('error') 
+    else:
+        print(filters['var2'])
+        varName = filters['var2']
+        varName,th = filters['var1'].split('>')
+        if 'duration' in varName: 
+            var2 = measureDuration(path)
+            th2 = float(th)
+        if 'variance' in varName: 
+            var2 = measureVariance(path)
+            th2 = float(th)
 
     #th1 = 35.
     #th2 = 0.1 #1. #0.1 #1. #0.4 #2.5
