@@ -178,8 +178,8 @@ def scatter_th_api(var1,var2,th1,th2,group1,group2):
     if var1 == 'duration': var1 = measureDuration(path)
     if var2 == 'variance': var2 = measureVariance(path)
 
-    th1 = 35
-    th2 = 0.1 #1. #0.1 #1. #0.4 #2.5
+    #th1 = 35.
+    #th2 = 0.1 #1. #0.1 #1. #0.4 #2.5
     fig = scatterPlot(var1,var2,th1,th2)
 
     # Save it to a temporary buffer.
