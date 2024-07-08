@@ -7,34 +7,6 @@ from matplotlib.figure import Figure
 
 import timeSeriesInsightToolkit as tsi
 
-# Crea un'istanza della classe Flask e configura l'applicazione.
-app = Flask(__name__)
-
-# Configurazione di flask
-
-@app.route('/', methods=['GET'])
-def home():
-    return jsonify({'message': 'Benvenuto al server REST!'})
-
-@app.route('/saluto', methods=['GET'])
-def saluto():
-    return jsonify({'message': 'Ciao, come stai?'})
-
-@app.route('/utente/<nome>', methods=['GET'])
-def saluto_utente(nome):
-    return jsonify({'message': f'Ciao {nome}, benvenuto al server REST!'})
-
-@app.route('/moltiplicazione/<int:num1>/<int:num2>', methods=['GET'])
-def moltiplicazione(num1, num2):
-    risultato = num1 * num2
-    return jsonify({'risultato': risultato})
-
-@app.route('/addizione', methods=['POST'])
-def addizione():
-    data = request.get_json()
-    somma = data['numero1'] + data['numero2']
-    return jsonify({'risultato': somma})
-
 
 # function that measures duration
 def measureDuration(path):
@@ -107,22 +79,41 @@ def scatterPlot(var1,var2,th1,th2):
     axs[1,0].set_ylim((var2Bins[0],var2Bins[-1]))
     return fig
 
-# function that generates REST API to measure duration and variance
-#@app.route('/measure/duration/variance/', methods=['GET'])
-#def measure_duration_varaince():
-#    return jsonify({'error: add group 1 and group 2':[]})
+# Crea un'istanza della classe Flask e configura l'applicazione.
+app = Flask(__name__)
 
-#@app.route('/measure/duration/variance/<group2>', methods=['GET'])
-#def measure_duration_varaince(group2):
-#    path = f'proc/{group2}/preprocessed-VR-sessions'
-#    #return jsonify({'path':path})
-#    return jsonify(measureDurationVariance(path))
+# Configurazione di flask
 
-#@app.route('/<group1>/<group2>/measures/duration/variance', methods=['GET'])
-#def measure_duration_varaince(group1,group2):
-#    path = f'{group1}/{group2}/preprocessed-VR-sessions'
-#    #return jsonify({'path':path})
-#    return jsonify(measureDurationVariance(path))
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({'message': 'Benvenuto al server REST!'})
+
+@app.route('/saluto', methods=['GET'])
+def saluto():
+    return jsonify({'message': 'Ciao, come stai?'})
+
+@app.route('/utente/<nome>', methods=['GET'])
+def saluto_utente(nome):
+    return jsonify({'message': f'Ciao {nome}, benvenuto al server REST!'})
+
+@app.route('/moltiplicazione/<int:num1>/<int:num2>', methods=['GET'])
+def moltiplicazione(num1, num2):
+    risultato = num1 * num2
+    return jsonify({'risultato': risultato})
+
+@app.route('/addizione', methods=['POST'])
+def addizione():
+    data = request.get_json()
+    somma = data['numero1'] + data['numero2']
+    return jsonify({'risultato': somma})
+
+
+@app.route('/<group1>/<group2>', methods=['GET'])
+def get_record(group1,group2):
+    path = f'{group1}/{group2}/preprocessed-VR-sessions'
+    # get variables from records    
+    ids, fileNames, dfSs, df = tsi.readData(pathSesRec)
+    return jsonify({'ids':ids,'fileNames':fileNames})
 
 @app.route('/<group1>/<group2>/measures', methods=['GET'])
 def measure(group1,group2):
