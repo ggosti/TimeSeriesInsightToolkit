@@ -124,7 +124,11 @@ Get measures of time of a defined variable for each record, at the moment only d
 http://<ipaddress>:<port>/measure/<measure>/<group>/<subgroup>
 ```
 
-Plot scatter plot of time dustation and variance.
+Generate scatter plot of two variables for which there is a defined function.
 ```
-http://<ipaddress>:<port>/scatter/duration/variance/<group>/<subgroup>
+http://<ipaddress>:<port>/scatter/<var1>/<var2>/<group>/<subgroup>
+```
+Generate scatter plot of two variables for which there is a defined function.
+```
+http://<ipaddress>:<port>/scatter/<var1>/<var2>/<float:th1>/<float:th2>/<group>/<subgroup>
 ```
