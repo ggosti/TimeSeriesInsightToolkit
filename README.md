@@ -113,7 +113,13 @@ Compute k-means on records.
 
 ## Rest API (Experimental)
 
-Implemented smple Rest APT.
+Simple Rest API implementation.
+
+# Preprocessing
+
+
+
+# Run gate
 
 Get measures of time dustation and variance for each record.
 ```
