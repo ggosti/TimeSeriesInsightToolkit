@@ -202,7 +202,7 @@ def scatter_th_api(var1,var2,th1,th2,group1,group2):
 
 def getVarPars(filters,path,varKey):
     if not (varKey in filters):
-        print('error') 
+        print('error missin '+varKey) 
     else:
         print(filters[varKey])
         varName,th = filters[varKey].split('>')
