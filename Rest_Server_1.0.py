@@ -206,10 +206,10 @@ def getVarPars(filters,path,varKey):
     else:
         print(filters[varKey])
         splitStr = filters[varKey].split('>')
-        if 'duration' in varName: 
+        if 'duration' in splitStr: 
             var = measureDuration(path)
             if len(splitStr)>1: th = float(splitStr[-1])
-        if 'variance' in varName: 
+        if 'variance' in splitStr: 
             var = measureVariance(path)
             if len(splitStr)>1: th = float(splitStr[-1])
         print(var,th)  
