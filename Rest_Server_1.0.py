@@ -124,7 +124,7 @@ def measure_duration_varaince(group1,group2):
     #return jsonify({'path':path})
     return jsonify(measureDurationVariance(path))
 
-@app.route('/measures/<measure>/<group1>/<group2>', methods=['GET'])
+@app.route('/<group1>/<group2>/measures/<measure>', methods=['GET'])
 def measure(measure,group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     if measure == 'duration': measures = measureDuration(path)
