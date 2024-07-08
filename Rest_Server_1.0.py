@@ -154,7 +154,7 @@ def measure(measure,group1,group2):
 
 # scatter plot of two defined vairables
 @app.route('/scatter/<var1>/<var2>/<group1>/<group2>', methods=['GET'])
-def scatter_duration_varaince(var1,var2,group1,group2):
+def scatter_api(var1,var2,group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     if var1 == 'duration': var1 = measureDuration(path)
     if var2 == 'variance': var2 = measureVariance(path)
@@ -173,7 +173,7 @@ def scatter_duration_varaince(var1,var2,group1,group2):
 
 # scatter plot of two defined vairables with gatting tresholds
 @app.route('/scatter/<var1>/<var2>/<float:th1>/<float:th2>/<group1>/<group2>', methods=['GET'])
-def scatter_duration_varaince(var1,var2,group1,group2):
+def scatter_th_api(var1,var2,th1,th2,group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     if var1 == 'duration': var1 = measureDuration(path)
     if var2 == 'variance': var2 = measureVariance(path)
