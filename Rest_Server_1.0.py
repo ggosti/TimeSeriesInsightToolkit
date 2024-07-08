@@ -129,7 +129,6 @@ def get_record_vars(group1,group2,record):
     dfS = tsi.readSessionData(pathSesRec,record)
 
     print(record)
-    #dfS = dfSs[fileNames == record]
     print(dfS)
     
     return jsonify({'dfS':dfS.to_dict('records'),'record':record})
@@ -142,18 +141,25 @@ def get_record_vars_plot(group1,group2,record):
         path = path + '/preprocessed-VR-sessions'
     pathSesRec = '/var/www/html/records/'+path
     # get variables from records    
-    ids, fileNames, dfSs, df = tsi.readData(pathSesRec)
+    dfS = tsi.readSessionData(pathSesRec,record)
 
     print(record)
-    dfS = dfSs[fileNames == record]
     print(dfS)
     nav = tsi.getVR(dfS)
     navAr = tsi.getAR(dfS)
     path = tsi.getPath(dfS,['posx','posy','posz'])
     fpath = tsi.getPath(dfS,['fx','fy','fz'])
     dpath = tsi.getPath(dfS,['dirx','diry','dirz'])
+    fig,axA,axB,ax1,ax2 = makeSessionPreproFig(uId, path, dpath, fpath, nav, fname, bbox, SpanSelector=False)
 
-    return jsonify({'dfS':dfS.to_dict('records'),'record':record,'nav':nav.tolist()})
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    # Embed the result in the html output.
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return f"<img src='data:image/png;base64,{data}'/>"
+
+    #return jsonify({'dfS':dfS.to_dict('records'),'record':record,'nav':nav.tolist()})
 
 
 #
