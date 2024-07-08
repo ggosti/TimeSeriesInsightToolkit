@@ -117,24 +117,38 @@ Simple Rest API implementation.
 
 # Preprocessing
 
+Show records:
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/
+```
+
+Show registry variables:
+```
+
+```
 
 
 # Run gate
 
-Get measures of time dustation and variance for each record.
+Get all measures defined for each record.
 ```
-http://<ipaddress>:<port>/measure/duration/variance/<group>/<subgroup>
+http://<ipaddress>:<port>/<group>/<subgroup>/measures
 ```
-Get measures of time of a defined variable for each record, at the moment only doration and variance are implemented.
+Filter measures, at the moment only doration and variance are implemented.
 ```
-http://<ipaddress>:<port>/measure/<measure>/<group>/<subgroup>
+http://<ipaddress>:<port>/<group>/<subgroup>/measures?key=variance
 ```
+or
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/measures?key=variance,duration
+```
+
 
 Generate scatter plot of two variables for which there is a defined function.
 ```
-http://<ipaddress>:<port>/scatter/<var1>/<var2>/<group>/<subgroup>
+http://<ipaddress>:<port>/<group>/<subgroup>/scatter?var1=duration>35&var2=variance>0.4
 ```
-Generate scatter plot of two variables for which there is a defined function.
+Generate scatter plot of two variables for which there is a defined function, and show gate threshold
 ```
-http://<ipaddress>:<port>/scatter/<var1>/<var2>/<float:th1>/<float:th2>/<group>/<subgroup>
+hhttp://<ipaddress>:<port>/<group>/<subgroup>/scatter?var1=duration>35&var2=variance>0.4
 ```
