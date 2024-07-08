@@ -118,20 +118,11 @@ def scatterPlot(var1,var2,th1,th2):
 #    #return jsonify({'path':path})
 #    return jsonify(measureDurationVariance(path))
 
-@app.route('/<group1>/<group2>/measures/duration/variance', methods=['GET'])
-def measure_duration_varaince(group1,group2):
-    path = f'{group1}/{group2}/preprocessed-VR-sessions'
-    #return jsonify({'path':path})
-    return jsonify(measureDurationVariance(path))
-
-@app.route('/<group1>/<group2>/measure/<measure>', methods=['GET'])
-def measure(measure,group1,group2):
-    path = f'{group1}/{group2}/preprocessed-VR-sessions'
-    if measure == 'duration': measures = measureDuration(path)
-    if measure == 'variance': measures = measureVariance(path)
-
-    #return jsonify({'path':path})
-    return jsonify(measures)
+#@app.route('/<group1>/<group2>/measures/duration/variance', methods=['GET'])
+#def measure_duration_varaince(group1,group2):
+#    path = f'{group1}/{group2}/preprocessed-VR-sessions'
+#    #return jsonify({'path':path})
+#    return jsonify(measureDurationVariance(path))
 
 @app.route('/<group1>/<group2>/measure', methods=['GET'])
 def measure2(group1,group2):
@@ -140,10 +131,12 @@ def measure2(group1,group2):
     filters = request.args.to_dict()
     #keys = filters.keys()
     print('filters',filters)
-    measures = {}
     
-    if 'duration' in filters: measures['duration'] = measureDuration(path)
-    if 'variance' in filters: measures['variance'] = measureVariance(path)
+    if filters: measures = measureDurationVariance(path) 
+    else:
+        reqMeasures = filters['measures']
+        if 'duration' in reqMeasures: measures['duration'] = measureDuration(path)
+        if 'variance' in reqMeasures: measures['variance'] = measureVariance(path)
 
     #return jsonify({'path':path})
     return jsonify(measures)
