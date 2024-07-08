@@ -150,7 +150,8 @@ def get_record_vars_plot(group1,group2,record):
     path = tsi.getPath(dfS,['posx','posy','posz'])
     fpath = tsi.getPath(dfS,['fx','fy','fz'])
     dpath = tsi.getPath(dfS,['dirx','diry','dirz'])
-    fig,axA,axB,ax1,ax2 = tsi.makeSessionPreproFig(None, path, dpath, fpath, nav, fname, bbox, SpanSelector=False)
+    bbox = makeBBox(paths,dpaths,fpaths)
+    fig,axA,axB,ax1,ax2 = tsi.makeSessionPreproFig(None, path, dpath, fpath, nav, record, bbox, SpanSelector=False)
 
     # Save it to a temporary buffer.
     buf = BytesIO()
