@@ -74,7 +74,7 @@ def measureVariance(path):
         t,x,y,z = path.T
         totVar = np.var(x)+np.var(y)+np.var(z)
         totVars.append(totVar) 
-    return totVar #{'duration': totTimes,'variance': totVars}
+    return totVars #{'duration': totTimes,'variance': totVars}
 
 # function that measures duration and variance
 def measureDurationVariance(path):
