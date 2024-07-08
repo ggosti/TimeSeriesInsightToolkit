@@ -201,7 +201,7 @@ def scatter_th_api(var1,var2,th1,th2,group1,group2):
 
 # scatter plot of two defined vairables with gatting tresholds
 @app.route('/<group1>/<group2>/scatter', methods=['GET'])
-def scatter_th_api(group1,group2):
+def scatter_th_api2(group1,group2):
     path = f'{group1}/{group2}/preprocessed-VR-sessions'
     filters = request.args.to_dict()
     print('filters',filters)
