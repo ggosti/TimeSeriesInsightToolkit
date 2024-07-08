@@ -200,6 +200,21 @@ def scatter_th_api(var1,var2,th1,th2,group1,group2):
     return f"<img src='data:image/png;base64,{data}'/>"
 
 
+def getVarPars(filters,path,varKey):
+    if not (varKey in filters):
+        print('error') 
+    else:
+        print(filters[varKey])
+        varName,th = filters[varKey].split('>')
+        if 'duration' in varName: 
+            var = measureDuration(path)
+            th = float(th)
+        if 'variance' in varName: 
+            var = measureVariance(path)
+            th = float(th)
+        print(var,th)  
+    return var,th
+
 # scatter plot of two defined vairables with gatting tresholds
 @app.route('/<group1>/<group2>/scatter', methods=['GET'])
 def scatter_th_api2(group1,group2):
@@ -207,30 +222,8 @@ def scatter_th_api2(group1,group2):
     filters = request.args.to_dict()
     print('filters',filters)
 
-    if not ('var1' in filters):
-        print('error') 
-    else:
-        print(filters['var1'])
-        varName,th = filters['var1'].split('>')
-        if 'duration' in varName: 
-            var1 = measureDuration(path)
-            th1 = float(th)
-        if 'variance' in varName: 
-            var1 = measureVariance(path)
-            th1 = float(th)
-    
-    if not ('var2' in filters):
-        print('error') 
-    else:
-        print(filters['var2'])
-        varName = filters['var2']
-        varName,th = filters['var1'].split('>')
-        if 'duration' in varName: 
-            var2 = measureDuration(path)
-            th2 = float(th)
-        if 'variance' in varName: 
-            var2 = measureVariance(path)
-            th2 = float(th)
+    var1,th1 = getVarPars(filters,path,'var1')
+    var2,th2 = getVarPars(filters,path,'var2')
 
     #th1 = 35.
     #th2 = 0.1 #1. #0.1 #1. #0.4 #2.5
