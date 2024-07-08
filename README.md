@@ -122,11 +122,15 @@ Show records:
 http://<ipaddress>:<port>/<group>/<subgroup>/
 ```
 
-Show registry variables:
+Show record data:
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/<record>
 ```
 
+Plot record data:
 ```
-
+http://<ipaddress>:<port>/<group>/<subgroup>/<record>/plot
+```
 
 # Run gate
 
