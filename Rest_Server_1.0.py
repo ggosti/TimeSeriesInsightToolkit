@@ -136,7 +136,7 @@ def get_record_vars(group1,group2,record):
     fpath = tsi.getPath(dfS,['fx','fy','fz'])
     dpath = tsi.getPath(dfS,['dirx','diry','dirz'])
 
-    return jsonify({'dfS':dfS.to_dict(),'record':record,'nav':nav})
+    return jsonify({'dfS':dfS.to_dict(),'record':record})#,'nav':nav})
 
 
 
