@@ -819,8 +819,8 @@ def makeRecordPlot(fname, dfS, colName = ['posx','posy','posz','dirx','diry','di
     #bbox = makeBBox([path])
     colVals = [dfS[c].values for c in colName]
     
-    fig = plt.figure(figsize=(16, 12))
-    ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
+    fig = plt.figure(figsize=(8, 6))
+    ax1 = fig.add_axes([0.15, 0.11, 1., 1.])
     for l,ln in zip(colVals,colName):
         ax1.plot(time,l,label=ln)
     #ax1.plot(t,n,label='VR')
