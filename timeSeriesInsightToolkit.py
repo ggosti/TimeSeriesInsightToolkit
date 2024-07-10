@@ -814,7 +814,7 @@ def makeRecordPlot(fname, dfS, colName = ['posx','posy','posz','dirx','diry','di
         nav = getVR(dfS)
         navAr = getAR(dfS)
         time = dfS['time']
-        bbox = makeBBox([path])
+        #bbox = makeBBox([path])
     colVals = [dfS[c].values for c in colName]
     
     fig = plt.figure(figsize=(16, 12))
