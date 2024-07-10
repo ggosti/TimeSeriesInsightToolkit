@@ -2,6 +2,8 @@ import base64
 from io import BytesIO
 
 from flask import Flask, render_template, jsonify, request
+import connexion
+
 import numpy as np
 from matplotlib.figure import Figure
 
@@ -80,7 +82,10 @@ def scatterPlot(var1,var2,th1,th2):
     return fig
 
 # Crea un'istanza della classe Flask e configura l'applicazione.
-app = Flask(__name__)
+#app = Flask(__name__)
+# Flask class instace with added functionalities
+app = connexion.App(__name__, specification_dir="./")
+app.add_api("swagger.yml")
 
 # Configurazione di flask
 
@@ -116,7 +121,7 @@ def addizione():
 #-----------------------------------------------------
 
 
-@app.route('records/<group1>/<group2>', methods=['GET'])
+@app.route('/records/<group1>/<group2>', methods=['GET'])
 def get_records(group1,group2):
     path = f'{group1}/{group2}'
     if group1 == 'proc':
