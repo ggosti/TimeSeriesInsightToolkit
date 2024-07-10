@@ -824,6 +824,7 @@ def makeRecordPlot(fname, dfS, colName = ['posx','posy','posz','dirx','diry','di
     for l,ln in zip(colVals,colName):
         ax1.plot(time,l,label=ln)
     #ax1.plot(t,n,label='VR')
+    print('nav',nav)
     if not nav == False: ax1.fill_between(time, 0, 1, where=nav, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
     if not navAr == False: ax1.fill_between(time, 0, 1, where=navAr, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='AR')
     lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
