@@ -116,7 +116,7 @@ def addizione():
 #-----------------------------------------------------
 
 
-@app.route('/<group1>/<group2>', methods=['GET'])
+@app.route('records/<group1>/<group2>', methods=['GET'])
 def get_records(group1,group2):
     path = f'{group1}/{group2}'
     if group1 == 'proc':

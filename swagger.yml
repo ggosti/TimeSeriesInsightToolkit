@@ -1,0 +1,21 @@
+# swagger.yml
+
+openapi: 3.0.0
+info:
+  title: "Time Series Insight Toolkit Flask REST API"
+  description: "An API for records"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+paths:
+  /raw:
+    get:
+      operationId: "rawGroups.read_all"
+      tags:
+        - "Raw groups"
+      summary: "Read the list of raw groups"
+      responses:
+        "200":
+          description: "Successfully read raw groups"
