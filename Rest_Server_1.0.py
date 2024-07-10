@@ -1,7 +1,7 @@
 import base64
 from io import BytesIO
 
-from flask import Flask, jsonify, request
+from flask import Flask, render_template, jsonify, request
 import numpy as np
 from matplotlib.figure import Figure
 
@@ -87,6 +87,9 @@ app = Flask(__name__)
 #@app.route('/', methods=['GET'])
 #def home():
 #    return jsonify({'message': 'Benvenuto al server REST!'})
+@app.route("/")
+def home():
+    return render_template("home.html")
 
 @app.route('/saluto', methods=['GET'])
 def saluto():
