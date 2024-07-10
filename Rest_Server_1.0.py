@@ -84,9 +84,9 @@ app = Flask(__name__)
 
 # Configurazione di flask
 
-@app.route('/', methods=['GET'])
-def home():
-    return jsonify({'message': 'Benvenuto al server REST!'})
+#@app.route('/', methods=['GET'])
+#def home():
+#    return jsonify({'message': 'Benvenuto al server REST!'})
 
 @app.route('/saluto', methods=['GET'])
 def saluto():
@@ -150,13 +150,6 @@ def get_record_vars_plot(group1,group2,record):
 
     print(record)
     print(dfS)
-    #nav = tsi.getVR(dfS)
-    #navAr = tsi.getAR(dfS)
-    #path = tsi.getPath(dfS,['posx','posy','posz'])
-    #fpath = tsi.getPath(dfS,['fx','fy','fz'])
-    #dpath = tsi.getPath(dfS,['dirx','diry','dirz'])
-    #bbox = tsi.makeBBox([path],[dpath],[fpath])
-    #fig,axA,axB,ax1,ax2 = tsi.makeSessionPreproFig(None, path, dpath, fpath, nav, record, bbox, SpanSelector=False)
     fig = tsi.makeRecordPlot(record, dfS)
 
     # Save it to a temporary buffer.
@@ -290,4 +283,4 @@ if __name__ == '__main__':
     #path = 'proc/bfanini-20231026-kjtgo0m0w/preprocessed-VR-sessions'
     #result = measureDurationVariance(path)
     #print(result)
-    app.run(host='192.167.233.88', port=8087),# debug=True)
+    app.run(host='192.167.233.88', port=8087, debug=True)
