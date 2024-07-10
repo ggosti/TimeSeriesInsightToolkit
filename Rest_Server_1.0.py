@@ -108,6 +108,11 @@ def addizione():
     return jsonify({'risultato': somma})
 
 
+#-----------------------------------------------------
+# Preprocessing
+#-----------------------------------------------------
+
+
 @app.route('/<group1>/<group2>', methods=['GET'])
 def get_records(group1,group2):
     path = f'{group1}/{group2}'

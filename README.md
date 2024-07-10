@@ -115,7 +115,7 @@ Compute k-means on records.
 
 Simple Rest API implementation.
 
-# Preprocessing
+### Preprocessing
 
 Show records:
 ```
@@ -132,7 +132,7 @@ Plot record data:
 http://<ipaddress>:<port>/<group>/<subgroup>/<record>/plot
 ```
 
-# Run gate
+### Run gate
 
 Get all measures defined for each record.
 ```
