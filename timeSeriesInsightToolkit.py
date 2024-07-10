@@ -813,8 +813,8 @@ def makeRecordPlot(fname, dfS, colName = ['posx','posy','posz','dirx','diry','di
     nav = False
     navAr = False
     if 'nav' in dfS.columns:
-        nav = getVR(dfS)
-        navAr = getAR(dfS)
+        time,nav = getVR(dfS)
+        time,navAr = getAR(dfS)
     time = dfS['time']
     #bbox = makeBBox([path])
     colVals = [dfS[c].values for c in colName]
