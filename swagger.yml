@@ -37,6 +37,19 @@ paths:
       responses:
         "200":
           description: "Successfully read raw groups"
+
+  /raw/{group}:
+    get:
+      operationId: "registry.read_raw_group"
+      tags:
+        - Raw groups
+      summary: "Read the recods in a raw group"
+      parameters:
+        - $ref: "#/components/parameters/group"
+      responses:
+        "200":
+          description: "Successfully read  raw group"
+
   /proc:
     get:
       operationId: "registry.read_proc"
@@ -47,17 +60,17 @@ paths:
         "200":
           description: "Successfully read processed groups"
 
-  /raw/{group}:
+  /proc/{group}:
     get:
-      operationId: "registry.read_group"
+      operationId: "registry.read_proc_group"
       tags:
-        - Groups
+        - Processed groups
       summary: "Read the recods in a raw group"
       parameters:
         - $ref: "#/components/parameters/group"
       responses:
         "200":
-          description: "Successfully read  raw group"
+          description: "Successfully read processed group"
 
   #/proc/<group>/pars:
   #  get:
