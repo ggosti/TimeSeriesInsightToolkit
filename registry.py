@@ -34,7 +34,7 @@ def read_proc():
 def read_all_proc_group_versions(group):
     path = f'/var/www/html/records/proc/{group}'
     if os.path.isdir(path): 
-        version = os.listdir(path) #[x for x in os.listdir(path) if '.csv' in x]
+        version = get_sub_dirs(path) #os.listdir(path) #[x for x in os.listdir(path) if '.csv' in x]
     else:
         abort(
             404, f"{group} not found in processed"
