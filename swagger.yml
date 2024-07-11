@@ -49,7 +49,7 @@ paths:
 
   /raw/{gName}:
     get:
-      operationId: "registry.read_goup"
+      operationId: "registry.read_group"
       tags:
         - Groups
       summary: "Read the recods in a raw group"
