@@ -55,7 +55,7 @@ def read_proc_group_version(version,group):
 
 def read_proc_group_version_record(version,group,record):
     path = f'/var/www/html/records/proc/{group}/{version}/'
-    if os.path.isfile(path+record): 
+    if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)
     else:
         abort(
