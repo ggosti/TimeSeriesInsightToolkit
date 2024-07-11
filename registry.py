@@ -3,6 +3,8 @@
 import os
 from flask import abort
 
+import timeSeriesInsightToolkit as tsi
+
 def get_sub_dirs(path):
     print('path',path,os.listdir(path))
     groups = [x for x in os.listdir(path) if os.path.isdir(path+'/'+x)] #os.walk(path)]
@@ -50,3 +52,17 @@ def read_proc_group_version(version,group):
             404, f"{group} not found in processed"
         )
     return groups
+
+def read_proc_group_version_record(version,group,record):
+    path = f'/var/www/html/records/proc/{group}/{version}/'
+    if os.path.isfile(path+record): 
+        dfS = tsi.readSessionData(path+record,record)
+    else:
+        abort(
+            404, f"{group} not found in processed"
+        )
+    
+    print(record)
+    print(dfS)
+    
+    return {'record':record,'dfS': dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
