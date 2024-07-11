@@ -17,3 +17,9 @@ def read_proc():
     path = '/var/www/html/records/proc'
     groups = get_sub_dirs(path)
     return groups
+
+def read_group(gName):
+    path = '/var/www/html/records/raw'
+    groups = get_sub_dirs(path+'/'+gName)
+
+    return groups

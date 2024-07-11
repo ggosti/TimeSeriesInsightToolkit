@@ -19,8 +19,8 @@ components:
   #      name:
   #        type: "string"
   parameters:
-    groupName:
-      name: "groupName"
+    gName:
+      name: "gName"
       description: "Name of the goup to get"
       in: path
       required: True
@@ -47,14 +47,14 @@ paths:
         "200":
           description: "Successfully read processed groups"
 
-  /raw/{groupName}:
+  /raw/{gName}:
     get:
       operationId: "registry.read_goup"
       tags:
         - Groups
       summary: "Read the recods in a raw group"
       parameters:
-        - $ref: "#/components/parameters/groupName"
+        - $ref: "#/components/parameters/gName"
       responses:
         "200":
           description: "Successfully read  raw group"
