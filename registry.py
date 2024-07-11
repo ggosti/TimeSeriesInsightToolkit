@@ -20,6 +20,5 @@ def read_proc():
 
 def read_group(group):
     path = '/var/www/html/records/raw'
-    groups = get_sub_dirs(path+'/'+group)
-
+    groups = os.listdir(path+'/'+group)
     return groups
