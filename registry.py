@@ -1,6 +1,6 @@
 # rawGroups.py
 
-import base64
+#import base64
 from io import BytesIO
 import os
 from flask import abort
@@ -84,7 +84,13 @@ def plot_record(version,group,record):
 
     # Save it to a temporary buffer.
     buf = BytesIO()
-    fig.savefig(buf, format="png")
-    # Embed the result in the html output.
-    data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    return f"<img src='data:image/png;base64,{data}'/>"
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    fig.close()  # Close the figure to free memory
+
+    # Return the image as a response
+    return send_file(buf, mimetype='image/png')
+    #fig.savefig(buf, format="png")
+    ## Embed the result in the html output.
+    #data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    #return f"<img src='data:image/png;base64,{data}'/>"
