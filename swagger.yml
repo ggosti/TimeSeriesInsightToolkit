@@ -9,6 +9,24 @@ info:
 servers:
   - url: "/api"
 
+components:
+  #schemas:
+  #  Group:
+  #    type: "object"
+  #    required:
+  #      - name
+  #    properties:
+  #      name:
+  #        type: "string"
+  parameters:
+    groupName:
+      name: "groupName"
+      description: "Name of the goup to get"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
 paths:
   /raw:
     get:
@@ -28,6 +46,18 @@ paths:
       responses:
         "200":
           description: "Successfully read processed groups"
+
+  /raw/{groupName}:
+    get:
+      operationId: "registry.read_goup"
+      tags:
+        - Groups
+      summary: "Read the recods in a raw group"
+      parameters:
+        - $ref: "#/components/parameters/groupName"
+      responses:
+        "200":
+          description: "Successfully read  raw group"
 
   #/proc/<group>/pars:
   #  get:

@@ -4,7 +4,8 @@ import os
 
 def get_sub_dirs(path):
     print('path',os.walk(path))
-    groups = [x[0] for x in os.walk(path)]
+    groups = [x for x in os.listdir() if os.path.isdir(x)] #os.walk(path)]
+    print('groups',groups)
     return groups
 
 def read_raw():
