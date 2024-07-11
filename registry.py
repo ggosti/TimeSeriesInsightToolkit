@@ -65,4 +65,4 @@ def read_proc_group_version_record(version,group,record):
     print(record)
     print(dfS)
     
-    return {'record':record,'dfS': dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
+    return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
