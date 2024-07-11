@@ -829,7 +829,7 @@ def makeRecordPlot(fname, dfS, colName = ['posx','posy','posz','dirx','diry','di
     if len(nav)>0 : ax1.fill_between(time, 0, 1, where=navAr, alpha=0.4, transform=ax1.get_xaxis_transform(),color='aqua',label='AR')
     #lgd = ax1.legend(   bbox_to_anchor=(-0.14,))
     fig.legend(loc='outside left upper ')
-    return fig
+    return plt,fig
 
 
 def makeSessionPreproFig(uId, path, dpath, fpath, nav, fname, bbox, SpanSelector=False):

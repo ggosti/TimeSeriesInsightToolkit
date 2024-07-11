@@ -80,13 +80,13 @@ def plot_record(version,group,record):
 
     print(record)
     print(dfS)
-    fig = tsi.makeRecordPlot(record, dfS)
+    plt,fig = tsi.makeRecordPlot(record, dfS)
 
     # Save it to a temporary buffer.
     buf = BytesIO()
     fig.savefig(buf, format='png')
     buf.seek(0)
-    fig.close()  # Close the figure to free memory
+    plt.close(fig)  # Close the figure to free memory
 
     # Return the image as a response
     return send_file(buf, mimetype='image/png')
