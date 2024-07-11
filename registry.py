@@ -1,5 +1,7 @@
 # rawGroups.py
 
+import base64
+from io import BytesIO
 import os
 from flask import abort
 
@@ -66,3 +68,23 @@ def read_proc_group_version_record(version,group,record):
     print(dfS)
     
     return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
+
+def plot_record(version,group,record):
+    path = f'/var/www/html/records/proc/{group}/{version}/'
+    if os.path.isfile(path+record+'.csv'): 
+        dfS = tsi.readSessionData(path,record)
+    else:
+        abort(
+            404, f"{group} not found in processed"
+        )
+
+    print(record)
+    print(dfS)
+    fig = tsi.makeRecordPlot(record, dfS)
+
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    # Embed the result in the html output.
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return f"<img src='data:image/png;base64,{data}'/>"
