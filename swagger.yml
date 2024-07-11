@@ -12,10 +12,19 @@ servers:
 paths:
   /raw:
     get:
-      operationId: "rawGroups.read_all"
+      operationId: "data.read_raw"
       tags:
         - "Raw groups"
       summary: "Read the list of raw groups"
       responses:
         "200":
           description: "Successfully read raw groups"
+  /proc:
+    get:
+      operationId: "data.read_proc"
+      tags:
+        - "Processed groups"
+      summary: "Read the list of processed groups"
+      responses:
+        "200":
+          description: "Successfully read processed groups"

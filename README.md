@@ -23,10 +23,19 @@ dependencies:
   - voila
 ```
 
+
+
 to install dependencis with conda:
 ```
 conda env create -f environment.yml
 ```
+To run the rest api server there are things that must be installed with pip:
+```
+  Installed with pip:
+  - Flask==2.2.3 
+  - "connexion[swagger-ui]==2.14.1"
+```
+
 
 ### Test
 
