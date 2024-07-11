@@ -17,7 +17,7 @@ def read_raw():
 def read_raw_group(group):
     path = '/var/www/html/records/raw'+'/'+group
     if os.path.isdir(path): 
-        groups = os.listdir(path)
+        groups = [x for x in os.listdir(path) if '.csv' in x]
     else:
         abort(
             404, f"{group} not found in raw"
@@ -31,10 +31,10 @@ def read_proc():
     return groups
 
 
-def read_proc_group(group):
-    path = '/var/www/html/records/proc'+'/'+group
+def read_proc_version_group(version,group):
+    path = f'/var/www/html/records/proc/{version}/{group}'
     if os.path.isdir(path): 
-        groups = os.listdir(path)
+        groups = [x for x in os.listdir(path) if '.csv' in x]
     else:
         abort(
             404, f"{group} not found in processed"
