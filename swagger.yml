@@ -26,6 +26,14 @@ components:
       required: True
       schema:
         type: "string"
+  parameters:
+    procTag:
+      name: "version"
+      description: "String identifieng the preprocessed date version"
+      in: path
+      required: True
+      schema:
+        type: "string"
 
 paths:
   /raw:
@@ -60,13 +68,14 @@ paths:
         "200":
           description: "Successfully read processed groups"
 
-  /proc/{group}:
+  /proc/{version}/{group}:
     get:
-      operationId: "registry.read_proc_group"
+      operationId: "registry.def read_proc_version_group"
       tags:
         - Processed groups
       summary: "Read the recods in a raw group"
       parameters:
+        - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/group"
       responses:
         "200":
