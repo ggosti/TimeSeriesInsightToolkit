@@ -112,6 +112,20 @@ paths:
       responses:
         "200":
           description: "Successfully read processed group record"
+  
+  /proc/{group}/{version}/{record}/plot:
+    get:
+      operationId: "registry.plot_record"
+      tags:
+        - Processed groups
+      summary: "Plot the recod json in a proccessed verion group"
+      parameters:
+        - $ref: "#/components/parameters/group"
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/record"
+      responses:
+        "200":
+          description: "Successfully plotted processed group record"
 
   #/proc/<group>/pars:
   #  get:
