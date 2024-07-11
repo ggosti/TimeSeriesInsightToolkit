@@ -126,6 +126,12 @@ paths:
       responses:
         "200":
           description: "Successfully plotted processed group record"
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+
 
   #/proc/<group>/pars:
   #  get:
