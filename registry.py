@@ -56,7 +56,7 @@ def read_proc_group_version(version,group):
 def read_proc_group_version_record(version,group,record):
     path = f'/var/www/html/records/proc/{group}/{version}/'
     if os.path.isfile(path+record): 
-        dfS = tsi.readSessionData(path+record,record)
+        dfS = tsi.readSessionData(path,record)
     else:
         abort(
             404, f"{group} not found in processed"
