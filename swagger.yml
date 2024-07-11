@@ -47,7 +47,7 @@ paths:
 
   /raw/{group}:
     get:
-      operationId: "registry.read_raw_group"
+      operationId: "registry.read_raw_groups"
       tags:
         - Raw groups
       summary: "Read the recods in a raw group"
@@ -67,18 +67,30 @@ paths:
         "200":
           description: "Successfully read processed groups"
 
-  /proc/{version}/{group}:
+  /proc/{group}:
     get:
-      operationId: "registry.read_proc_version_group"
+      operationId: "registry.read_all_proc_group_versions"
       tags:
         - Processed groups
-      summary: "Read the recods in a raw group"
+      summary: "Read the processed data versions in a processed group"
+      parameters:
+        - $ref: "#/components/parameters/group"
+      responses:
+        "200":
+          description: "Successfully read processed group versions"
+
+  /proc/{group}/{version}/:
+    get:
+      operationId: "registry.read_proc_group_version"
+      tags:
+        - Processed groups
+      summary: "Read the recods in a proccessed verion group"
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/group"
       responses:
         "200":
-          description: "Successfully read processed group"
+          description: "Successfully read processed group version"
 
   #/proc/<group>/pars:
   #  get:
