@@ -70,7 +70,7 @@ paths:
 
   /proc/{version}/{group}:
     get:
-      operationId: "registry.def read_proc_version_group"
+      operationId: "registry.read_proc_version_group"
       tags:
         - Processed groups
       summary: "Read the recods in a raw group"
