@@ -3,8 +3,8 @@
 import os
 
 def get_sub_dirs(path):
-    print('path',path)
-    groups = [x for x in os.listdir(path) if os.path.isdir(x)] #os.walk(path)]
+    print('path',path,os.listdir(path))
+    groups = [x for x in os.listdir(path) if os.path.isdir(path+'/'+x)] #os.walk(path)]
     print('groups',groups)
     return groups
 
