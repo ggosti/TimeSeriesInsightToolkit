@@ -12,19 +12,29 @@ servers:
 paths:
   /raw:
     get:
-      operationId: "data.read_raw"
+      operationId: "registry.read_raw"
       tags:
         - "Raw groups"
-      summary: "Read the list of raw groups"
+      summary: "Read the list of raw records groups"
       responses:
         "200":
           description: "Successfully read raw groups"
   /proc:
     get:
-      operationId: "data.read_proc"
+      operationId: "registry.read_proc"
       tags:
         - "Processed groups"
-      summary: "Read the list of processed groups"
+      summary: "Read the list of processed records groups"
       responses:
         "200":
           description: "Successfully read processed groups"
+
+  #/proc/<group>/pars:
+  #  get:
+  #    operationId: "registry.read_proc_pars"
+  #    tags:
+  #      - "Processed groups"
+  #    summary: "Read the parameters used for the processed records groups"
+  #    responses:
+  #      "200":
+  #        description: "Successfully processed group parameter"
