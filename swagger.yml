@@ -54,7 +54,7 @@ paths:
         - Groups
       summary: "Read the recods in a raw group"
       parameters:
-        - $ref: "#/components/parameters/name"
+        - $ref: "#/components/parameters/group"
       responses:
         "200":
           description: "Successfully read  raw group"
