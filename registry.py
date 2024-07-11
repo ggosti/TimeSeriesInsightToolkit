@@ -31,15 +31,15 @@ def read_proc():
     return groups
 
 
-def read_all_proc_group_versions(version):
-    path = f'/var/www/html/records/proc/{version}'
+def read_all_proc_group_versions(group):
+    path = f'/var/www/html/records/proc/{group}'
     if os.path.isdir(path): 
-        groups = os.listdir(path) #[x for x in os.listdir(path) if '.csv' in x]
+        version = os.listdir(path) #[x for x in os.listdir(path) if '.csv' in x]
     else:
         abort(
             404, f"{group} not found in processed"
         )
-    return groups
+    return version
 
 def read_proc_group_version(version,group):
     path = f'/var/www/html/records/proc/{group}/{version}/'
