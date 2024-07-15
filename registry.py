@@ -24,7 +24,7 @@ def read_raw_event(eid):
         groups = get_sub_dirs(path)
     else:
         abort(
-            404, f"{gid} not found in raw"
+            404, f"{eid} not found in raw"
         )
     return groups
 
@@ -41,9 +41,18 @@ def read_raw_groups(eid,gid):
 
 def read_proc():
     path = '/var/www/html/records/proc'
-    groups = get_sub_dirs(path)
-    return groups
+    events = get_sub_dirs(path)
+    return events
 
+def read_proc_event(eid):
+    path = f'/var/www/html/records/proc/{eid}/'
+    if os.path.isdir(path): 
+        groups = get_sub_dirs(path)
+    else:
+        abort(
+            404, f"{eid} not found in raw"
+        )
+    return groups
 
 def read_all_proc_group_versions(gid):
     path = f'/var/www/html/records/proc/{gid}'
