@@ -108,7 +108,7 @@ paths:
 
   /proc/{eid}/sessions/{gid}:
     get:
-      operationId: "registry.read_all_proc_group_versions"
+      operationId: "registry.read_proc_group_versions"
       tags:
         - Processed groups
       summary: "Read the processed data versions in a processed group"
