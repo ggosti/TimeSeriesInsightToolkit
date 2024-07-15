@@ -99,7 +99,7 @@ def plot_record(eid,version,gid,record):
 
     print(record)
     print(dfS)
-    plt,fig = tsi.makeRecordPlot(record, dfS)
+    plt,fig = tsi.makeRecordPlot(record, dfS, colName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz'])
 
     # Save it to a temporary buffer.
     buf = BytesIO()
@@ -126,7 +126,7 @@ def plot_record_timeiterval(eid,version,gid,record,tstart,tend):
 
     print(record)
     print(dfS)
-    plt,fig = tsi.makeRecordPlotTimeInterval(record, dfS, colName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz'],tstart=tstart,tend=tend)
+    plt,fig = tsi.makeRecord(record, dfS, colName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz'],tstart=tstart,tend=tend)
 
     # Save it to a temporary buffer.
     buf = BytesIO()
