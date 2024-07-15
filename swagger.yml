@@ -52,7 +52,7 @@ paths:
         "200":
           description: "Successfully read raw groups"
 
-  /raw/{group}:
+  /raw/{gid}:
     get:
       operationId: "registry.read_raw_groups"
       tags:
@@ -74,7 +74,7 @@ paths:
         "200":
           description: "Successfully read processed groups"
 
-  /proc/{group}:
+  /proc/{gid}:
     get:
       operationId: "registry.read_all_proc_group_versions"
       tags:
@@ -86,7 +86,7 @@ paths:
         "200":
           description: "Successfully read processed group versions"
 
-  /proc/{group}/{version}/:
+  /proc/{gid}/{version}/:
     get:
       operationId: "registry.read_proc_group_version"
       tags:
@@ -99,7 +99,7 @@ paths:
         "200":
           description: "Successfully read processed group version"
 
-  /proc/{group}/{version}/{record}:
+  /proc/{gid}/{version}/{record}:
     get:
       operationId: "registry.read_proc_group_version_record"
       tags:
