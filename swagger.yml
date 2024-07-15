@@ -21,14 +21,14 @@ components:
   parameters:
     gid:
       name: "gid"
-      description: ""Group ID of the session"
+      description: "Group ID of the session"
       in: path
       required: True
       schema:
         type: "string"
     version:
       name: "version"
-      description: "String identifieng the preprocessed data version"
+      description: "Version ID of the sesseion"
       in: path
       required: True
       schema:
