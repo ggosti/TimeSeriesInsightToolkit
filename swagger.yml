@@ -54,12 +54,12 @@ paths:
       operationId: "registry.read_raw"
       tags:
         - "Raw groups"
-      summary: "Read the list of events with raw records groups"
+      summary: "Read the list of capture events with raw records groups"
       responses:
         "200":
           description: "Successfully read events with raw groups"
 
-  /raw/eid:
+  /raw/{eid}/:
     get:
       operationId: "registry.read_raw_event"
       tags:
@@ -71,13 +71,14 @@ paths:
         "200":
           description: "Successfully read raw groups"
 
-  /raw/{gid}:
+  /raw/{eid}/session/{gid}:
     get:
       operationId: "registry.read_raw_groups"
       tags:
         - Raw groups
       summary: "Read the recods in a raw group"
       parameters:
+        - $ref: "#/components/parameters/eid"
         - $ref: "#/components/parameters/gid"
       responses:
         "200":

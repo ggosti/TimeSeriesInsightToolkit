@@ -23,8 +23,8 @@ def read_raw_event(eid):
     groups = get_sub_dirs(path)
     return groups
 
-def read_raw_groups(gid):
-    path = '/var/www/html/records/raw'+'/'+gid
+def read_raw_groups(eid,gid):
+    path = f'/var/www/html/records/raw/{eid}/sessions/{gid}/'
     if os.path.isdir(path): 
         groups = [x for x in os.listdir(path) if '.csv' in x]
     else:
