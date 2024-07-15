@@ -113,3 +113,30 @@ def plot_record(eid,version,gid,record):
     ## Embed the result in the html output.
     #data = base64.b64encode(buf.getbuffer()).decode("ascii")
     #return f"<img src='data:image/png;base64,{data}'/>"
+
+
+def plot_record_timeiterval(eid,version,gid,record,tstart,tend):
+    path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
+    if os.path.isfile(path+record+'.csv'): 
+        dfS = tsi.readSessionData(path,record)
+    else:
+        abort(
+            404, f"{gid} not found in processed"
+        )
+
+    print(record)
+    print(dfS)
+    plt,fig = tsi.makeRecordPlotTimeInterval(record, dfS, colName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz'],tstart=tstart,tend=tend)
+
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    plt.close(fig)  # Close the figure to free memory
+
+    # Return the image as a response
+    return send_file(buf, mimetype='image/png')
+    #fig.savefig(buf, format="png")
+    ## Embed the result in the html output.
+    #data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    #return f"<img src='data:image/png;base64,{data}'/>"
