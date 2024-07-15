@@ -71,7 +71,7 @@ paths:
         "200":
           description: "Successfully read raw groups"
 
-  /raw/{eid}/session/{gid}:
+  /raw/{eid}/sessions/{gid}:
     get:
       operationId: "registry.read_raw_groups"
       tags:
@@ -94,7 +94,7 @@ paths:
         "200":
           description: "Successfully read events with processed groups"
 
-  /proc/{eid}/:
+  /proc/{eid}:
     get:
       operationId: "registry.read_proc_event"
       tags:
@@ -106,38 +106,41 @@ paths:
         "200":
           description: "Successfully read events with processed groups"
 
-  /proc/{gid}:
+  /proc/{eid}/sessions/{gid}:
     get:
       operationId: "registry.read_all_proc_group_versions"
       tags:
         - Processed groups
       summary: "Read the processed data versions in a processed group"
       parameters:
+        - $ref: "#/components/parameters/eid"
         - $ref: "#/components/parameters/gid"
       responses:
         "200":
           description: "Successfully read processed group versions"
 
-  /proc/{gid}/{version}/:
+  /proc/{eid}/sessions/{gid}/{version}:
     get:
       operationId: "registry.read_proc_group_version"
       tags:
         - Processed groups
       summary: "Read the recods in a proccessed verion group"
       parameters:
+        - $ref: "#/components/parameters/eid"
         - $ref: "#/components/parameters/gid"
         - $ref: "#/components/parameters/version"
       responses:
         "200":
           description: "Successfully read processed group version"
 
-  /proc/{gid}/{version}/{record}:
+  /proc/{eid}/sessions/{gid}/{version}/{record}:
     get:
       operationId: "registry.read_proc_group_version_record"
       tags:
         - Processed groups
       summary: "Read the recod json in a proccessed verion group"
       parameters:
+        - $ref: "#/components/parameters/eid"
         - $ref: "#/components/parameters/gid"
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/record"
@@ -145,13 +148,14 @@ paths:
         "200":
           description: "Successfully read processed group record"
   
-  /proc/{gid}/{version}/{record}/plot:
+  /proc/{eid}/sessions/{gid}/{version}/{record}/plot:
     get:
       operationId: "registry.plot_record"
       tags:
         - Processed groups
       summary: "Plot the recod json in a proccessed verion group"
       parameters:
+        - $ref: "#/components/parameters/eid"
         - $ref: "#/components/parameters/gid"
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/record"

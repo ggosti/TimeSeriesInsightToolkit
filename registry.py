@@ -54,8 +54,8 @@ def read_proc_event(eid):
         )
     return groups
 
-def read_all_proc_group_versions(gid):
-    path = f'/var/www/html/records/proc/{gid}'
+def read_proc_group_versions(eid,gid):
+    path = f'/var/www/html/records/proc/{eid}/{gid}'
     if os.path.isdir(path): 
         version = get_sub_dirs(path) #os.listdir(path) #[x for x in os.listdir(path) if '.csv' in x]
     else:
@@ -64,8 +64,8 @@ def read_all_proc_group_versions(gid):
         )
     return version
 
-def read_proc_group_version(version,gid):
-    path = f'/var/www/html/records/proc/{gid}/{version}/'
+def read_proc_group_version(eid,version,gid):
+    path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
     if os.path.isdir(path): 
         groups = [x for x in os.listdir(path) if '.csv' in x]
     else:
@@ -74,8 +74,8 @@ def read_proc_group_version(version,gid):
         )
     return groups
 
-def read_proc_group_version_record(version,gid,record):
-    path = f'/var/www/html/records/proc/{gid}/{version}/'
+def read_proc_group_version_record(eid,version,gid,record):
+    path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
     if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)
     else:
@@ -88,8 +88,8 @@ def read_proc_group_version_record(version,gid,record):
     
     return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
 
-def plot_record(version,gid,record):
-    path = f'/var/www/html/records/proc/{gid}/{version}/'
+def plot_record(eid,version,gid,record):
+    path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
     if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)
     else:
