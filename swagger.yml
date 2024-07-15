@@ -65,7 +65,7 @@ paths:
       tags:
         - "Raw groups in capture events"
       summary: "Read the list of raw records groups in the capute event"
-        parameters:
+      parameters:
         - $ref: "#/components/parameters/eid"
       responses:
         "200":
