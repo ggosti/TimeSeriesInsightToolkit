@@ -53,14 +53,16 @@ components:
       in: path
       required: True
       schema:
-        type: "float"
+        type: "number"
+        minimum: 0.0
     tend:
       name: "tend"
       description: "Ending time"
       in: path
       required: True
       schema:
-        type: "float"
+        type: "number"
+        minimum: 0.0
 
 paths:
   /raw:
