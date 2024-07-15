@@ -61,10 +61,12 @@ paths:
 
   /raw/eid:
     get:
-      operationId: "registry.read_raw"
+      operationId: "registry.read_raw_event"
       tags:
-        - "Raw groups"
-      summary: "Read the list of raw records groups"
+        - "Raw groups in capture events"
+      summary: "Read the list of raw records groups in the capute event"
+        parameters:
+        - $ref: "#/components/parameters/eid"
       responses:
         "200":
           description: "Successfully read raw groups"
