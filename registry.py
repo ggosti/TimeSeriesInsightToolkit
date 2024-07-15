@@ -18,13 +18,13 @@ def read_raw():
     groups = get_sub_dirs(path)
     return groups
 
-def read_raw_groups(group):
-    path = '/var/www/html/records/raw'+'/'+group
+def read_raw_groups(gid):
+    path = '/var/www/html/records/raw'+'/'+gid
     if os.path.isdir(path): 
         groups = [x for x in os.listdir(path) if '.csv' in x]
     else:
         abort(
-            404, f"{group} not found in raw"
+            404, f"{gid} not found in raw"
         )
     return groups
 
@@ -35,33 +35,33 @@ def read_proc():
     return groups
 
 
-def read_all_proc_group_versions(group):
-    path = f'/var/www/html/records/proc/{group}'
+def read_all_proc_group_versions(gid):
+    path = f'/var/www/html/records/proc/{gid}'
     if os.path.isdir(path): 
         version = get_sub_dirs(path) #os.listdir(path) #[x for x in os.listdir(path) if '.csv' in x]
     else:
         abort(
-            404, f"{group} not found in processed"
+            404, f"{gid} not found in processed"
         )
     return version
 
-def read_proc_group_version(version,group):
-    path = f'/var/www/html/records/proc/{group}/{version}/'
+def read_proc_group_version(version,gid):
+    path = f'/var/www/html/records/proc/{gid}/{version}/'
     if os.path.isdir(path): 
         groups = [x for x in os.listdir(path) if '.csv' in x]
     else:
         abort(
-            404, f"{group} not found in processed"
+            404, f"{gid} not found in processed"
         )
     return groups
 
-def read_proc_group_version_record(version,group,record):
-    path = f'/var/www/html/records/proc/{group}/{version}/'
+def read_proc_group_version_record(version,gid,record):
+    path = f'/var/www/html/records/proc/{gid}/{version}/'
     if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)
     else:
         abort(
-            404, f"{group} not found in processed"
+            404, f"{gid} not found in processed"
         )
     
     print(record)
@@ -69,13 +69,13 @@ def read_proc_group_version_record(version,group,record):
     
     return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
 
-def plot_record(version,group,record):
-    path = f'/var/www/html/records/proc/{group}/{version}/'
+def plot_record(version,gid,record):
+    path = f'/var/www/html/records/proc/{gid}/{version}/'
     if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)
     else:
         abort(
-            404, f"{group} not found in processed"
+            404, f"{gid} not found in processed"
         )
 
     print(record)
