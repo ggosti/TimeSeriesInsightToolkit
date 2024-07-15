@@ -3,7 +3,7 @@
 openapi: 3.0.0
 info:
   title: "Time Series Insight Toolkit Flask REST API"
-  description: "An API for records"
+  description: "An API for records fram capture events"
   version: "1.0.0"
 
 servers:
@@ -89,10 +89,22 @@ paths:
       operationId: "registry.read_proc"
       tags:
         - "Processed groups"
-      summary: "Read the list of processed records groups"
+      summary: "Read the list of capture events with processed records groups"
       responses:
         "200":
-          description: "Successfully read processed groups"
+          description: "Successfully read events with processed groups"
+
+  /proc/{eid}/:
+    get:
+      operationId: "registry.read_proc_event"
+      tags:
+        - "Processed groups"
+      summary: "Read the list of processed records groups in the capture event"
+      parameters:
+        - $ref: "#/components/parameters/eid"
+      responses:
+        "200":
+          description: "Successfully read events with processed groups"
 
   /proc/{gid}:
     get:
