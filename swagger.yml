@@ -47,6 +47,20 @@ components:
       required: True
       schema:
         type: "string"
+    tstart:
+      name: "tstart"
+      description: "Starting time"
+      in: path
+      required: True
+      schema:
+        type: "float"
+    tend:
+      name: "tend"
+      description: "Ending time"
+      in: path
+      required: True
+      schema:
+        type: "float"
 
 paths:
   /raw:
@@ -138,7 +152,7 @@ paths:
       operationId: "registry.read_proc_group_version_record"
       tags:
         - Processed groups
-      summary: "Read the recod json in a proccessed verion group"
+      summary: "Read the record in a proccessed verion group"
       parameters:
         - $ref: "#/components/parameters/eid"
         - $ref: "#/components/parameters/gid"
@@ -153,12 +167,34 @@ paths:
       operationId: "registry.plot_record"
       tags:
         - Processed groups
-      summary: "Plot the recod json in a proccessed verion group"
+      summary: "Plot the record in a proccessed verion group"
       parameters:
         - $ref: "#/components/parameters/eid"
         - $ref: "#/components/parameters/gid"
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/record"
+      responses:
+        "200":
+          description: "Successfully plotted processed group record"
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+
+  /proc/{eid}/sessions/{gid}/{version}/{record}/plot/{tstart}/{tend}:
+    get:
+      operationId: "registry.plot_record_timeiterval"
+      tags:
+        - Processed groups
+      summary: "Plot the record entries in a gieven time interval."
+      parameters:
+        - $ref: "#/components/parameters/eid"
+        - $ref: "#/components/parameters/gid"
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/record"
+        - $ref: "#/components/parameters/tstart"
+        - $ref: "#/components/parameters/tend"
       responses:
         "200":
           description: "Successfully plotted processed group record"
