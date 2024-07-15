@@ -53,7 +53,7 @@ paths:
     get:
       operationId: "registry.read_raw"
       tags:
-        - "Raw capture events"
+        - "Raw groups"
       summary: "Read the list of events with raw records groups"
       responses:
         "200":
@@ -63,7 +63,7 @@ paths:
     get:
       operationId: "registry.read_raw_event"
       tags:
-        - "Raw groups in capture events"
+        - "Raw groups"
       summary: "Read the list of raw records groups in the capute event"
       parameters:
         - $ref: "#/components/parameters/eid"
