@@ -19,6 +19,13 @@ components:
   #      name:
   #        type: "string"
   parameters:
+    eid:
+      name: "eid"
+      description: "Capture event ID of the session"
+      in: path
+      required: True
+      schema:
+        type: "string"
     gid:
       name: "gid"
       description: "Group ID of the session"
@@ -43,6 +50,16 @@ components:
 
 paths:
   /raw:
+    get:
+      operationId: "registry.read_raw"
+      tags:
+        - "Raw capture events"
+      summary: "Read the list of events with raw records groups"
+      responses:
+        "200":
+          description: "Successfully read events with raw groups"
+
+  /raw/eid:
     get:
       operationId: "registry.read_raw"
       tags:

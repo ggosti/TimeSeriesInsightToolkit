@@ -15,6 +15,11 @@ def get_sub_dirs(path):
 
 def read_raw():
     path = '/var/www/html/records/raw'
+    events = get_sub_dirs(path)
+    return events
+
+def read_raw_event(eid):
+    path = f'/var/www/html/records/raw/{eid}'
     groups = get_sub_dirs(path)
     return groups
 
