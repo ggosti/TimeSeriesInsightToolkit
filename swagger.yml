@@ -19,9 +19,9 @@ components:
   #      name:
   #        type: "string"
   parameters:
-    group:
-      name: "group"
-      description: "Name of the group to get"
+    gid:
+      name: "gid"
+      description: ""Group ID of the session"
       in: path
       required: True
       schema:
@@ -59,7 +59,7 @@ paths:
         - Raw groups
       summary: "Read the recods in a raw group"
       parameters:
-        - $ref: "#/components/parameters/group"
+        - $ref: "#/components/parameters/gid"
       responses:
         "200":
           description: "Successfully read  raw group"
@@ -81,7 +81,7 @@ paths:
         - Processed groups
       summary: "Read the processed data versions in a processed group"
       parameters:
-        - $ref: "#/components/parameters/group"
+        - $ref: "#/components/parameters/gid"
       responses:
         "200":
           description: "Successfully read processed group versions"
@@ -93,7 +93,7 @@ paths:
         - Processed groups
       summary: "Read the recods in a proccessed verion group"
       parameters:
-        - $ref: "#/components/parameters/group"
+        - $ref: "#/components/parameters/gid"
         - $ref: "#/components/parameters/version"
       responses:
         "200":
@@ -106,21 +106,21 @@ paths:
         - Processed groups
       summary: "Read the recod json in a proccessed verion group"
       parameters:
-        - $ref: "#/components/parameters/group"
+        - $ref: "#/components/parameters/gid"
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/record"
       responses:
         "200":
           description: "Successfully read processed group record"
   
-  /proc/{group}/{version}/{record}/plot:
+  /proc/{gid}/{version}/{record}/plot:
     get:
       operationId: "registry.plot_record"
       tags:
         - Processed groups
       summary: "Plot the recod json in a proccessed verion group"
       parameters:
-        - $ref: "#/components/parameters/group"
+        - $ref: "#/components/parameters/gid"
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/record"
       responses:
