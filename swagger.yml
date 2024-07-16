@@ -69,7 +69,7 @@ components:
       in: 'query'
       required: True
       schema:
-        type: 'array',
+        type: 'array'
         items:
           type: 'string'
 
