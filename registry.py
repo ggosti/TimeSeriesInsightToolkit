@@ -204,13 +204,13 @@ def proc_record_prev_create(eid,version,gid,record):
         #if os.path.isfile(path+record+'-prev.png'):
         print('Generate file')
         dfS = tsi.readSessionData(path,record)
-        path = tsi.getPath(dfS,listCols = ['posx','posy','posz'])
+        ppath = tsi.getPath(dfS,listCols = ['posx','posy','posz'])
         dpath = tsi.getPath(dfS,listCols = ['dirx','diry','dirz'])
         print(record)
         print(dfS)
         fig = plt.figure(figsize=(6,6))
         ax = fig.add_subplot(projection='3d')
-        ax,sc = tsi.drawPath(path,dpath=dpath,BBox=None,ax=ax)
+        ax,sc = tsi.drawPath(path=ppath,dpath=dpath,BBox=None,ax=ax)
         # Get rid of colored axes planes
         # First remove fill
         ax.xaxis.pane.fill = False
