@@ -39,8 +39,8 @@ def read_raw_groups(eid,gid):
         )
     return groups
 
-def read_raw_group_version_record_columns(eid,version,gid,record,columns):
-    path = f'/var/www/html/records/raw/{eid}/{gid}/{version}/'
+def read_raw_group_version_record_columns(eid,gid,record,columns):
+    path = f'/var/www/html/records/raw/{eid}/{gid}/'
     print('columns',columns)
     if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)
@@ -56,8 +56,8 @@ def read_raw_group_version_record_columns(eid,version,gid,record,columns):
     #
     #return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
 
-def raw_record_prev(eid,version,gid,record):
-    path = f'/var/www/html/records/raw/{eid}/{gid}/{version}/'
+def raw_record_prev(eid,gid,record):
+    path = f'/var/www/html/records/raw/{eid}/{gid}/'
     if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)
         path = tsi.getPath(dfS,listCols = ['posx','posy','posz'])
