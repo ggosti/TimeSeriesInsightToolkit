@@ -85,7 +85,7 @@ def raw_record_prev(eid,gid,record):
     return send_file(buf, mimetype='image/png')
 
 def raw_record_prev_create(eid,gid,record):
-    path = f'/var/www/html/records/proc/{eid}/{gid}/'
+    path = f'/var/www/html/records/raw/{eid}/{gid}/'
     if os.path.isfile(path+record+'.csv'):
         #if os.path.isfile(path+record+'-prev.png'):
         print('Generate file')
