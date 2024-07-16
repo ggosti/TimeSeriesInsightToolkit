@@ -113,7 +113,7 @@ paths:
     get:
       operationId: "registry.read_raw_group_version_record_columns"
       tags:
-        - Processed groups
+        - Raw groups
       summary: "Returns specified columns from the raw record"
       parameters:
         - $ref: "#/components/parameters/eid"
@@ -129,7 +129,7 @@ paths:
     get:
       operationId: "registry.raw_record_prev"
       tags:
-        - Processed groups
+        - Raw groups
       summary: "Plot the raw record preview"
       parameters:
         - $ref: "#/components/parameters/eid"
