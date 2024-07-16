@@ -5,8 +5,23 @@ from io import BytesIO
 import os
 from flask import abort, send_file, jsonify
 import matplotlib.pyplot as plt
+from PIL import Image
 
 import timeSeriesInsightToolkit as tsi
+
+def load_eps_to_buffer(file_path):
+    # Open the EPS file
+    with Image.open(file_path) as img:
+        # Create an in-memory bytes buffer
+        buffer = io.BytesIO()
+        
+        # Save the image to the buffer in a different format (e.g., PNG)
+        img.save(buffer, format='PNG')
+        
+        # Move the cursor to the beginning of the buffer
+        buffer.seek(0)
+    
+    return buffer
 
 def get_sub_dirs(path):
     print('path',path,os.listdir(path))
@@ -154,30 +169,45 @@ def read_proc_group_version_record_columns(eid,version,gid,record,columns):
 
 def proc_record_prev(eid,version,gid,record):
     path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
-    if os.path.isfile(path+record+'.csv'): 
-        dfS = tsi.readSessionData(path,record)
-        path = tsi.getPath(dfS,listCols = ['posx','posy','posz'])
-        dpath = tsi.getPath(dfS,listCols = ['dirx','diry','dirz'])
+    if os.path.isfile(path+record+'.csv'):
+        if not os.path.isfile(path+record+'-prev.png'):
+            print('Generate file')
+            dfS = tsi.readSessionData(path,record)
+            path = tsi.getPath(dfS,listCols = ['posx','posy','posz'])
+            dpath = tsi.getPath(dfS,listCols = ['dirx','diry','dirz'])
+            print(record)
+            print(dfS)
+            fig = plt.figure(figsize=(6,6))
+            ax = fig.add_subplot(projection='3d')
+            ax,sc = tsi.drawPath(path,dpath=dpath,BBox=None,ax=ax)
+            # Get rid of colored axes planes
+            # First remove fill
+            ax.xaxis.pane.fill = False
+            ax.yaxis.pane.fill = False
+            ax.zaxis.pane.fill = False
+            fig.savefig(path+record+'-prev.png', transparent=True)
     else:
         abort(
             404, f"{gid} not found in processed"
         )
-    print(record)
-    print(dfS)
-    fig = plt.figure(figsize=(6,6))
-    ax = fig.add_subplot(projection='3d')
-    ax,sc = tsi.drawPath(path,dpath=dpath,BBox=None,ax=ax)
-    # Get rid of colored axes planes
-    # First remove fill
-    ax.xaxis.pane.fill = False
-    ax.yaxis.pane.fill = False
-    ax.zaxis.pane.fill = False
+    #print(record)
+    #print(dfS)
+    #fig = plt.figure(figsize=(6,6))
+    #ax = fig.add_subplot(projection='3d')
+    #ax,sc = tsi.drawPath(path,dpath=dpath,BBox=None,ax=ax)
+    ## Get rid of colored axes planes
+    ## First remove fill
+    #ax.xaxis.pane.fill = False
+    #ax.yaxis.pane.fill = False
+    #ax.zaxis.pane.fill = False
 
-    # Save it to a temporary buffer.
-    buf = BytesIO()
-    fig.savefig(buf, format='png')
-    buf.seek(0)
-    plt.close(fig)  # Close the figure to free memory
+    ## Save it to a temporary buffer.
+    #buf = BytesIO()
+    #fig.savefig(buf, format='png')
+    #buf.seek(0)
+    #plt.close(fig)  # Close the figure to free memory
+
+    buf = load_eps_to_buffer(path+record+'-prev.png')
 
     # Return the image as a response
     return send_file(buf, mimetype='image/png')
