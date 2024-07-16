@@ -88,6 +88,21 @@ def read_proc_group_version_record(eid,version,gid,record):
     
     return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
 
+def read_proc_group_version_record_columns(eid,version,gid,record.columns):
+    path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
+    print('columns',columns)
+    if os.path.isfile(path+record+'.csv'): 
+        dfS = tsi.readSessionData(path,record)
+    else:
+        abort(
+            404, f"{gid} not found in processed"
+        )
+    
+    print(record)
+    print(dfS)
+    
+    return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
+
 def plot_record(eid,version,gid,record):
     path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
     if os.path.isfile(path+record+'.csv'): 
