@@ -39,6 +39,52 @@ def read_raw_groups(eid,gid):
         )
     return groups
 
+def read_raw_group_version_record_columns(eid,version,gid,record,columns):
+    path = f'/var/www/html/records/raw/{eid}/{gid}/{version}/'
+    print('columns',columns)
+    if os.path.isfile(path+record+'.csv'): 
+        dfS = tsi.readSessionData(path,record)
+        filtered_data = dfS[['time']+columns].to_dict(orient='list')
+    else:
+        abort(
+            404, f"{gid} not found in processed"
+        )
+    
+    return jsonify(filtered_data)
+    #print(record)
+    #print(dfS)
+    #
+    #return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
+
+def raw_record_prev(eid,version,gid,record):
+    path = f'/var/www/html/records/raw/{eid}/{gid}/{version}/'
+    if os.path.isfile(path+record+'.csv'): 
+        dfS = tsi.readSessionData(path,record)
+        path = tsi.getPath(dfS,listCols = ['posx','posy','posz'])
+        dpath = tsi.getPath(dfS,listCols = ['dirx','diry','dirz'])
+    else:
+        abort(
+            404, f"{gid} not found in processed"
+        )
+    print(record)
+    print(dfS)
+    fig = plt.figure(figsize=(6,6))
+    ax = fig.add_subplot(projection='3d')
+    ax,sc = tsi.drawPath(path,dpath=dpath,BBox=None,ax=ax)
+    # Get rid of colored axes planes
+    # First remove fill
+    ax.xaxis.pane.fill = False
+    ax.yaxis.pane.fill = False
+    ax.zaxis.pane.fill = False
+
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    plt.close(fig)  # Close the figure to free memory
+
+    # Return the image as a response
+    return send_file(buf, mimetype='image/png')
 
 def read_proc():
     path = '/var/www/html/records/proc'
@@ -68,12 +114,12 @@ def read_proc_group_versions(eid,gid):
 def read_proc_group_version(eid,version,gid):
     path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
     if os.path.isdir(path): 
-        groups = [x for x in os.listdir(path) if '.csv' in x]
+        records = [x for x in os.listdir(path) if '.csv' in x]
     else:
         abort(
             404, f"{gid} not found in processed"
         )
-    return groups
+    return records
 
 def read_proc_group_version_record(eid,version,gid,record):
     path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
@@ -87,7 +133,7 @@ def read_proc_group_version_record(eid,version,gid,record):
     print(record)
     print(dfS)
     
-    return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
+    return jsonify(dfS.to_dict(orient='records')) #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
 
 def read_proc_group_version_record_columns(eid,version,gid,record,columns):
     path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
@@ -106,7 +152,7 @@ def read_proc_group_version_record_columns(eid,version,gid,record,columns):
     #
     #return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
 
-def porc_record_prev(eid,version,gid,record):
+def proc_record_prev(eid,version,gid,record):
     path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
     if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)

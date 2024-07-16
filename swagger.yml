@@ -21,21 +21,21 @@ components:
   parameters:
     eid:
       name: "eid"
-      description: "Capture event ID of the session"
+      description: "Capture event ID"
       in: path
       required: True
       schema:
         type: "string"
     gid:
       name: "gid"
-      description: "Group ID of the session"
+      description: "Group ID"
       in: path
       required: True
       schema:
         type: "string"
     version:
       name: "version"
-      description: "Version ID of the sesseion"
+      description: "Version ID"
       in: path
       required: True
       schema:
@@ -108,6 +108,42 @@ paths:
       responses:
         "200":
           description: "Successfully read  raw group"
+
+  /raw/{eid}/sessions/{gid}/{version}/{record}/filter:
+    get:
+      operationId: "registry.read_raw_group_version_record_columns"
+      tags:
+        - Processed groups
+      summary: "Returns specified columns from the raw record"
+      parameters:
+        - $ref: "#/components/parameters/eid"
+        - $ref: "#/components/parameters/gid"
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/record"
+        - $ref: "#/components/parameters/columns"
+      responses:
+        "200":
+          description: "Successfully read processed group record columns"
+  
+  /raw/{eid}/sessions/{gid}/{version}/{record}/prev:
+    get:
+      operationId: "registry.raw_record_prev"
+      tags:
+        - Processed groups
+      summary: "Plot the raw record preview"
+      parameters:
+        - $ref: "#/components/parameters/eid"
+        - $ref: "#/components/parameters/gid"
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/record"
+      responses:
+        "200":
+          description: "Successfully plotted processed group record preview"
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
 
   /proc:
     get:
@@ -191,7 +227,7 @@ paths:
   
   /proc/{eid}/sessions/{gid}/{version}/{record}/prev:
     get:
-      operationId: "registry.porc_record_prev"
+      operationId: "registry.proc_record_prev"
       tags:
         - Processed groups
       summary: "Plot the record preview"
