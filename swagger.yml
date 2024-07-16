@@ -222,10 +222,8 @@ paths:
       responses:
         "200":
           description: "Successfully read processed group record columns"
-  
-  /proc/{eid}/sessions/{gid}/{version}/{record}/prev:
-    get:
-      operationId: "registry.proc_record_prev"
+    post:
+      operationId: "registry.proc_record_prev_create"
       tags:
         - Processed groups
       summary: "Plot the record preview"
@@ -242,6 +240,8 @@ paths:
               schema:
                 type: string
                 format: binary
+
+  
 
   /proc/{eid}/sessions/{gid}/{version}/{record}/plot:
     get:
