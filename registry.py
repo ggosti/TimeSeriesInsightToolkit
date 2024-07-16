@@ -13,7 +13,7 @@ def load_eps_to_buffer(file_path):
     # Open the EPS file
     with Image.open(file_path) as img:
         # Create an in-memory bytes buffer
-        buffer = io.BytesIO()
+        buffer = BytesIO()
         
         # Save the image to the buffer in a different format (e.g., PNG)
         img.save(buffer, format='PNG')
