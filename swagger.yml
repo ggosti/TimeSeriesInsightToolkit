@@ -189,6 +189,26 @@ paths:
         "200":
           description: "Successfully read processed group record columns"
   
+  /proc/{eid}/sessions/{gid}/{version}/{record}/prev:
+    get:
+      operationId: "registry.record_prev"
+      tags:
+        - Processed groups
+      summary: "Plot the record preview"
+      parameters:
+        - $ref: "#/components/parameters/eid"
+        - $ref: "#/components/parameters/gid"
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/record"
+      responses:
+        "200":
+          description: "Successfully plotted processed group record"
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+
   /proc/{eid}/sessions/{gid}/{version}/{record}/plot:
     get:
       operationId: "registry.plot_record"
