@@ -88,7 +88,7 @@ def read_proc_group_version_record(eid,version,gid,record):
     
     return {'record':record,'dfS': dfS.to_dict('records')} #dfS.values.tolist()} #dfS.to_dict('records'),'record':record}
 
-def read_proc_group_version_record_columns(eid,version,gid,record.columns):
+def read_proc_group_version_record_columns(eid,version,gid,record,columns):
     path = f'/var/www/html/records/proc/{eid}/{gid}/{version}/'
     print('columns',columns)
     if os.path.isfile(path+record+'.csv'): 
