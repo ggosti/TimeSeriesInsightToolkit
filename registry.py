@@ -73,30 +73,42 @@ def read_raw_group_version_record_columns(eid,gid,record,columns):
 
 def raw_record_prev(eid,gid,record):
     path = f'/var/www/html/records/raw/{eid}/{gid}/'
-    if os.path.isfile(path+record+'.csv'): 
-        dfS = tsi.readSessionData(path,record)
-        path = tsi.getPath(dfS,listCols = ['posx','posy','posz'])
-        dpath = tsi.getPath(dfS,listCols = ['dirx','diry','dirz'])
+    #if os.path.isfile(path+record+'.csv'):
+    if os.path.isfile(path+record+'-prev.png'):
+            buf = load_eps_to_buffer(path+record+'-prev.png')
     else:
         abort(
-            404, f"{gid} not found in processed"
+            404, f"{record} preview not found in processed"
         )
-    print(record)
-    print(dfS)
-    fig = plt.figure(figsize=(6,6))
-    ax = fig.add_subplot(projection='3d')
-    ax,sc = tsi.drawPath(path,dpath=dpath,BBox=None,ax=ax)
-    # Get rid of colored axes planes
-    # First remove fill
-    ax.xaxis.pane.fill = False
-    ax.yaxis.pane.fill = False
-    ax.zaxis.pane.fill = False
 
-    # Save it to a temporary buffer.
-    buf = BytesIO()
-    fig.savefig(buf, format='png')
-    buf.seek(0)
-    plt.close(fig)  # Close the figure to free memory
+    # Return the image as a response
+    return send_file(buf, mimetype='image/png')
+
+def raw_record_prev_create(eid,gid,record):
+    path = f'/var/www/html/records/proc/{eid}/{gid}/'
+    if os.path.isfile(path+record+'.csv'):
+        #if os.path.isfile(path+record+'-prev.png'):
+        print('Generate file')
+        dfS = tsi.readSessionData(path,record)
+        ppath = tsi.getPath(dfS,listCols = ['posx','posy','posz'])
+        dpath = tsi.getPath(dfS,listCols = ['dirx','diry','dirz'])
+        print(record)
+        print(dfS)
+        fig = plt.figure(figsize=(6,6))
+        ax = fig.add_subplot(projection='3d')
+        ax,sc = tsi.drawPath(path=ppath,dpath=dpath,BBox=None,ax=ax)
+        # Get rid of colored axes planes
+        # First remove fill
+        ax.xaxis.pane.fill = False
+        ax.yaxis.pane.fill = False
+        ax.zaxis.pane.fill = False
+        fig.savefig(path+record+'-prev.png', transparent=True)
+    else:
+        abort(
+            404, f"{record} csv not found in processed"
+        )
+
+    buf = load_eps_to_buffer(path+record+'-prev.png')
 
     # Return the image as a response
     return send_file(buf, mimetype='image/png')
@@ -174,26 +186,8 @@ def proc_record_prev(eid,version,gid,record):
             buf = load_eps_to_buffer(path+record+'-prev.png')
     else:
         abort(
-            404, f"{gid} not found in processed"
+            404, f"{record} png not found in processed"
         )
-    #print(record)
-    #print(dfS)
-    #fig = plt.figure(figsize=(6,6))
-    #ax = fig.add_subplot(projection='3d')
-    #ax,sc = tsi.drawPath(path,dpath=dpath,BBox=None,ax=ax)
-    ## Get rid of colored axes planes
-    ## First remove fill
-    #ax.xaxis.pane.fill = False
-    #ax.yaxis.pane.fill = False
-    #ax.zaxis.pane.fill = False
-
-    ## Save it to a temporary buffer.
-    #buf = BytesIO()
-    #fig.savefig(buf, format='png')
-    #buf.seek(0)
-    #plt.close(fig)  # Close the figure to free memory
-
-    
 
     # Return the image as a response
     return send_file(buf, mimetype='image/png')
@@ -219,24 +213,8 @@ def proc_record_prev_create(eid,version,gid,record):
         fig.savefig(path+record+'-prev.png', transparent=True)
     else:
         abort(
-            404, f"{gid} not found in processed"
+            404, f"{record} csv not found in processed"
         )
-    #print(record)
-    #print(dfS)
-    #fig = plt.figure(figsize=(6,6))
-    #ax = fig.add_subplot(projection='3d')
-    #ax,sc = tsi.drawPath(path,dpath=dpath,BBox=None,ax=ax)
-    ## Get rid of colored axes planes
-    ## First remove fill
-    #ax.xaxis.pane.fill = False
-    #ax.yaxis.pane.fill = False
-    #ax.zaxis.pane.fill = False
-
-    ## Save it to a temporary buffer.
-    #buf = BytesIO()
-    #fig.savefig(buf, format='png')
-    #buf.seek(0)
-    #plt.close(fig)  # Close the figure to free memory
 
     buf = load_eps_to_buffer(path+record+'-prev.png')
 
