@@ -173,7 +173,7 @@ paths:
         "200":
           description: "Successfully read processed group record"
 
-  /proc/{eid}/sessions/{gid}/{version}/{record}/{columns}:
+  /proc/{eid}/sessions/{gid}/{version}/{record}/filter:
     get:
       operationId: "registry.read_proc_group_version_record_columns"
       tags:
