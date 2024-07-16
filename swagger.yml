@@ -222,11 +222,13 @@ paths:
       responses:
         "200":
           description: "Successfully read processed group record columns"
-    post:
-      operationId: "registry.proc_record_prev_create"
+  
+  /proc/{eid}/sessions/{gid}/{version}/{record}/prev:
+    get:
+      operationId: "registry.proc_record_prev"
       tags:
         - Processed groups
-      summary: "Plot the record preview"
+      summary: "Show the record preview"
       parameters:
         - $ref: "#/components/parameters/eid"
         - $ref: "#/components/parameters/gid"
@@ -235,6 +237,24 @@ paths:
       responses:
         "200":
           description: "Successfully plotted processed group record preview"
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+    post:
+      operationId: "registry.proc_record_prev_create"
+      tags:
+        - Processed groups
+      summary: "Create the record preview"
+      parameters:
+        - $ref: "#/components/parameters/eid"
+        - $ref: "#/components/parameters/gid"
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/record"
+      responses:
+        "200":
+          description: "Successfully created processed group record preview"
           content:
             image/png:
               schema:
