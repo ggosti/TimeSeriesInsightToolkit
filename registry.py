@@ -93,7 +93,7 @@ def read_proc_group_version_record_columns(eid,version,gid,record,columns):
     print('columns',columns)
     if os.path.isfile(path+record+'.csv'): 
         dfS = tsi.readSessionData(path,record)
-        filtered_data = dfS[columns].to_dict(orient='list')
+        filtered_data = dfS[['time']+columns].to_dict(orient='list')
     else:
         abort(
             404, f"{gid} not found in processed"
