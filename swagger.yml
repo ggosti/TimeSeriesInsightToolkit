@@ -191,7 +191,7 @@ paths:
   
   /proc/{eid}/sessions/{gid}/{version}/{record}/prev:
     get:
-      operationId: "registry.record_prev"
+      operationId: "registry.porc_record_prev"
       tags:
         - Processed groups
       summary: "Plot the record preview"
@@ -202,7 +202,7 @@ paths:
         - $ref: "#/components/parameters/record"
       responses:
         "200":
-          description: "Successfully plotted processed group record"
+          description: "Successfully plotted processed group record preview"
           content:
             image/png:
               schema:
