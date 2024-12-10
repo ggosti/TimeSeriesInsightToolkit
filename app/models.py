@@ -43,6 +43,28 @@ class Project:
     >>> project2.name
     'Test Project 2'
 
+    >>> group1 = Group(group_id=1, name="Test Group 1", path = "/path/project/group1")
+    >>> group2 = Group(group_id=2, name="Test Group 2", path = "/path/project/group2")
+    >>> group3 = Group(group_id=1, name="Test Group 3", path = "/path/project/group3")
+
+
+    >>> group1.name
+    'Test Group 1'
+
+    >>> group2.name
+    'Test Group 2'
+
+    >>> project1.add_group(group1)
+
+    >>> [g.name for g in  project1.groups]
+    ['Test Group 1']
+
+    >>> project2.add_group(group2)
+    >>> project2.add_group(group3)
+
+    >>> [g.name for g in  project2.groups]
+    ['Test Group 2','Test Group 3']
+
     """
     def __init__(self, project_id, name, path):
         self.id = project_id
