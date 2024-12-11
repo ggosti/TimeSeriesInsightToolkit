@@ -4,37 +4,16 @@ Analytics tool for time series data. Developed for csv records captured from 3D 
 
 ## Installation
 
-### Dependencies
+### Pip 
 
-The dependencies are stored in `environment.yml`, and are:
 ```
-name: mat
-channels:
-  - defaults
-dependencies:
-  - jupyter
-  - numpy
-  - matplotlib
-  - pandas
-  - scipy
-  - scikit-learn
-  - ipympl
-  - seaborn
-  - voila
+python -m venv env  
+source venv/bin/activate
+.\env\Scripts\Activate.ps1
+pip install Flask Flask-RESTx PyYAML pandas
 ```
 
 
-
-to install dependencis with conda:
-```
-conda env create -f environment.yml
-```
-To run the rest api server there are things that must be installed with pip:
-```
-  Installed with pip:
-  - Flask==2.2.3 
-  - "connexion[swagger-ui]==2.14.1"
-```
 
 
 ### Test

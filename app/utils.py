@@ -1,7 +1,10 @@
 
+import os, sys
+sys.path.insert(0, os.path.abspath(".."))
+
 import pandas as pd
 import os
-from models import Project, Group, Record
+from app.models import Project, Group, Record
 
 def get_records(path):
     dfs = []
