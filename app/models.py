@@ -1,5 +1,4 @@
 
-
 # Define classes Project, Group, and Record with relationships and data methods.
 
 
@@ -16,14 +15,19 @@ class Record:
     >>> record2.name
     'Test Record 2'
     """
-    def __init__(self, record_id, name, path):
-        self.record_id = record_id
+    def __init__(self, record_id, name, path, step, df):
+        self.id = record_id
         self.name = name
         self.path = path
         #self.data = data
+        self.step = step
+        self.version = None
         self.notes = {} #Column(String, nullable=True)
         self.parent_record = None
-        self.date = None  #Column(Date, nullable=True)
+        self.date = df  #df should be a Pandas DataFrame
+
+    def set_ver(self, ver):
+        self.version = ver
 
 class Group:
     """
@@ -111,6 +115,7 @@ class Project:
 
     def add_group(self, group):
         self.groups.append(group)
+
 
 
 
