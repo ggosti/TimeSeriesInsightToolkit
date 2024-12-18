@@ -4,29 +4,17 @@ Analytics tool for time series data. Developed for csv records captured from 3D 
 
 ## Installation
 
-### Dependencies
+### Pip 
 
-The dependencies are stored in `environment.yml`, and are:
 ```
-name: mat
-channels:
-  - defaults
-dependencies:
-  - jupyter
-  - numpy
-  - matplotlib
-  - pandas
-  - scipy
-  - scikit-learn
-  - ipympl
-  - seaborn
-  - voila
+python -m venv env  
+source venv/bin/activate
+.\env\Scripts\Activate.ps1
+pip install Flask Flask-RESTx PyYAML pandas
 ```
 
-to install dependencis with conda:
-```
-conda env create -f environment.yml
-```
+
+
 
 ### Test
 
@@ -40,6 +28,8 @@ To test script in verbose mode
 ```
 python -m doctest -v timeSeriesInsightToolkit.py
 ```
+
+## Usage
 
 ### Run Preprocessing
 
@@ -98,4 +88,59 @@ python generate-kde.py --path path/to/group/folder --opath path/to/group/ --dir 
 
 ### K-means
 
+`pos-k-means.ipynb` are Jupyter notebooks for applying k-means to the record varaibles.
+
+
+### Gaussian mixture morel
+
+`pos-gmm.ipynb` are Jupyter notebooks for applying k-means to the record varaibles.
+
+
 Compute k-means on records. 
+
+
+## Rest API (Experimental)
+
+Simple Rest API implementation.
+
+### Preprocessing
+
+Show records:
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/
+```
+
+Show record data:
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/<record>
+```
+
+Plot record data:
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/<record>/plot
+```
+
+### Run gate
+
+Get all measures defined for each record.
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/measures
+```
+Filter measures, at the moment only doration and variance are implemented.
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/measures?key=variance
+```
+or
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/measures?key=variance,duration
+```
+
+
+Generate scatter plot of two variables for which there is a defined function.
+```
+http://<ipaddress>:<port>/<group>/<subgroup>/scatter?var1=duration>35&var2=variance>0.4
+```
+Generate scatter plot of two variables for which there is a defined function, and show gate threshold
+```
+hhttp://<ipaddress>:<port>/<group>/<subgroup>/scatter?var1=duration>35&var2=variance>0.4
+```

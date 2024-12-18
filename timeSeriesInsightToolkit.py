@@ -198,13 +198,22 @@ def drawPath2DT(path,dpath=None,BBox=None,ax=None,yup=True,scale=None,colorbar=F
         #if isinstance(BBox , dict):
         #    setAxLim2BBox(ax,BBox,yup=False)
 
-def allPaths2D(xs,ys,largerThan=0,ax=None):
+def allPaths2D(paths,largerThan=0,ax=None,yup=True):
     if ax == None:
         fig = plt.figure()
         ax = fig.add_subplot()
-    for x,y in zip(xs,ys):
-        if len(x) > largerThan:
-            ax.scatter(x,y,s=1)
+    for path in paths:
+        #print(path)
+        if len(path) > largerThan:
+            t,x,y,z = path.T
+            if yup:
+                ax.scatter(x,z,s=1)
+                ax.set_xlabel('x')
+                ax.set_ylabel('z')
+            else:
+                ax.scatter(x,y,s=1)
+                ax.set_xlabel('x')
+                ax.set_ylabel('y')
         
 #def allPaths3D(xs,ys,zs,largerThan=0,ax=None):
 #    if ax == None:
@@ -239,9 +248,12 @@ def allPaths3D(paths,largerThan=0,ax=None,yup=True):
         ax.set_zlabel('z')
 
 
-def plotKDE(x,y,z,density,yup=True):
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
+def plotKDE(x,y,z,density,yup=True,ax=None):
+    if ax == None:
+        fig = plt.figure()
+        ax = fig.add_subplot(projection='3d')
+    else:
+        fig = ax.get_figure()
     if yup:
         sc = ax.scatter(x,z,y,c=density,s=1)
         fig.colorbar(sc, ax=ax)
@@ -610,337 +622,6 @@ def getSesVars(path,dpath,fpath,nav):
     assert t[-1] == t3[-1], 'problems with times pt path and nav'
     return t,x,y,z,dx,dy,dz,fx,fy,fz,n
 
-
-def makeSessionPreproFig(uId, path, dpath, fpath, nav, fname, bbox, SpanSelector=False):
-    t,x,y,z,dx,dy,dz,fx,fy,fz,n = getSesVars(path,dpath,fpath,nav)
-    plotLines = [x,y,z,dx,dy,dz,fx,fy,fz]
-    lineName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz']
-
-    fig = plt.figure(figsize=(16, 12))
-    if SpanSelector:
-        plt.title('Press left mouse button and drag \n'+
-                'to select a region in the top graph')
-    axA = fig.add_subplot(2,2,1,projection='3d')
-    ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
-    ax2 = fig.add_subplot(2,2,4)
-    axA,sc = drawPath(path, dpath=dpath, BBox=bbox, ax=axA)
-    #axA.set_title('Session '+str(uId)+' file: '+fname)
-    plt.colorbar(sc, ax=axA)
-
-    #print(np.isfinite(fpath[:,1]).any())
-    if np.isfinite(fpath[:,1]).any():
-        axB = fig.add_subplot(2,2,2,projection='3d')
-        axB,sc = drawPath(fpath, BBox=bbox,ax=axB) 
-    
-    for l,ln in zip(plotLines,lineName):
-        ax1.plot(t,l,label=ln)
-    #ax1.plot(t,n,label='VR')
-    ax1.fill_between(t, 0, 1, where=n, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
-    lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
-    
-    ax1.set_xlabel('t')
-    ax1.set_title('Session '+str(uId)+' file: '+fname)   
-    return fig,axA,axB,ax1,ax2
-
-
-def makeSessionPreproFigPx(uId, path, dpath, fpath, nav, fname, bbox, SpanSelector=False):
-    t,x,y,z,dx,dy,dz,fx,fy,fz,n = getSesVars(path,dpath,fpath,nav)
-    plotLines = [x,y,z,dx,dy,dz,fx,fy,fz]
-    lineName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz']
-
-    fig = plt.figure(figsize=(16, 12))
-    if SpanSelector:
-        plt.title('Press left mouse button and drag \n'+
-                'to select a region in the top graph')
-    axA = fig.add_subplot(2,2,1,projection='3d')
-    ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
-    ax2 = fig.add_subplot(2,2,4)
-    axA,sc = drawPath(path, dpath=dpath, BBox=bbox, ax=axA)
-    #axA.set_title('Session '+str(uId)+' file: '+fname)
-    plt.colorbar(sc, ax=axA)
-
-    #print(np.isfinite(fpath[:,1]).any())
-    if np.isfinite(fpath[:,1]).any():
-        axB = fig.add_subplot(2,2,2,projection='3d')
-        axB,sc = drawPath(fpath, BBox=bbox,ax=axB) 
-    
-    for l,ln in zip(plotLines,lineName):
-        ax1.plot(t,l,label=ln)
-    #ax1.plot(t,n,label='VR')
-    ax1.fill_between(t, 0, 1, where=n, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
-    lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
-    
-    ax1.set_xlabel('t')
-    ax1.set_title('Session '+str(uId)+' file: '+fname)   
-    return fig,axA,axB,ax1,ax2
-
-
-def preprocessSingleSession2(uId,folderParh,fname,par,dfS,nav,path,dpath,fpath,BBox = None):
-    BBoxTemp = makeBBox([path],[dpath],[fpath])
-    #print(BBoxTemp)
-
-    t,x,y,z,dx,dy,dz,fx,fy,fz,n = getSesVars(path,dpath,fpath,nav)
-    plotLines = [x,y,z,dx,dy,dz,fx,fy,fz]
-    lineName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz']
-
-    # #fig, [[ax3, ax4],[ax1, ax2]] = plt.subplots(2,2, figsize=(10, 10))
-    # #ax3.set_axis_off()
-    # #ax4.set_axis_off()
-    # fig = plt.figure(figsize=(16, 12))
-    # axA = fig.add_subplot(2,2,1,projection='3d')
-    # ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
-    # ax2 = fig.add_subplot(2,2,4)
-
-    # axA,sc = drawPath(path, dpath=dpath, BBox=BBoxTemp,ax=axA)
-    # #axA.set_title('Session '+str(uId)+' file: '+fname)
-    # plt.colorbar(sc, ax=axA)
-
-    # #print(np.isfinite(fpath[:,1]).any())
-    # if np.isfinite(fpath[:,1]).any():
-    #     axB = fig.add_subplot(2,2,2,projection='3d')
-    #     axB,sc = drawPath(fpath, BBox=BBoxTemp,ax=axB)
-
-    # for l,ln in zip(plotLines,lineName):
-    #     ax1.plot(t,l,label=ln)
-    # #ax1.plot(t,n,label='VR')
-    # ax1.fill_between(t, 0, 1, where=n, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
-    # lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
-    
-    # ax1.set_xlabel('t')
-    # ax1.set_title('Session '+str(uId)+' file: '+fname)#+'\n'+
-    #                 #'Press left mouse button and drag \n'+
-    #                 #'to select a region in the top graph')
-    fig,axA,axB,ax1,ax2 = makeSessionPreproFig(uId, path, dpath, fpath, nav, fname, BBoxTemp, SpanSelector=False)
-    
-    # Create the RangeSlider
-    slider_ax = fig.add_axes([0.20, 0.02, 0.60, 0.03])
-    if isinstance(par, dict):
-        t0 = par['t0']
-        t1 = par['t1']
-    else:
-        t0 = t[0]
-        t1 = t[-1]
-    slider = RangeSlider(slider_ax, "Time interval", t[0],  t[-1], valinit = (t0,t1) )
-
-    line2s = []
-    for l,ln in zip(plotLines,lineName):
-        if isinstance(par, dict):
-    #         ax1.axvline(t0,  alpha=0.1, color='red')
-    #         ax1.axvspan(t0,t1, alpha=0.1, color='red')
-    #         ax1.axvline(t1,  alpha=0.1, color='red')
-            indmin, indmax = np.searchsorted(t, (t0, t1))
-            #print('indmax',len(t), indmax)
-            #if t[indmax] == t1: indmax = indmax+1 
-            #print('indmax',len(t), indmax)
-            indmax = min(len(t), indmax+1)
-            #print('indmax',indmax)
-            line2dx, = ax2.plot(t[indmin:indmax], l[indmin:indmax])
-            ax2.set_xlim(t0, t1)
-        else:
-            line2dx, = ax2.plot([], [])
-            ax2.set_xlim((t[0],t[-1]))
-        line2s.append(line2dx)
-    # Create the Vertical lines on the histogram
-    lower_limit_line = ax1.axvline(slider.val[0], color='r')
-    span = ax1.axvspan(slider.val[0],slider.val[1], alpha=0.2, color='red')
-    upper_limit_line = ax1.axvline(slider.val[1], color='r')
-
-    def update(val):
-        # The val passed to a callback by the RangeSlider will
-        # be a tuple of (min, max)
-
-        ## Update the image's colormap
-        #im.norm.vmin = val[0]
-        #im.norm.vmax = val[1]
-
-        # Update the position of the vertical lines
-        lower_limit_line.set_xdata([val[0], val[0]])
-        #span.set_xdata(val[0],val[1], alpha=0.1, color='red')
-        upper_limit_line.set_xdata([val[1], val[1]])
-    
-        # appadate span zoom
-        tmin, tmax = val[0],val[1]
-        indmin, indmax = np.searchsorted(t, (tmin, tmax))
-        indmax = min(len(t), indmax)
-        region_t = t[indmin:indmax]
-        regions = []
-        for l in plotLines:
-            region_dx = l[indmin:indmax]
-            regions.append(region_dx)
-        if len(region_t) >= 2:
-            for line2dx,region_dx in zip(line2s,regions):
-                line2dx.set_data(region_t, region_dx)
-            #line2dy.set_data(region_t, region_dy)
-            #line2dz.set_data(region_t, region_dz)
-            ax2.set_xlim(region_t[0], region_t[-1])
-            ax2ymin = np.array(regions).min()
-            ax2ymax = np.array(regions).max()
-            ax2.set_ylim(ax2ymin-0.1, ax2ymax+0.1)
-        # Redraw the figure to ensure it updates
-        fig.canvas.draw_idle()
-    
-    slider.on_changed(update)
-
-    plt.show()
-    keeper = False
-    tInt = None
-    kDf = None
-    keeperPath = folderParh+'-preprocessed-VR-sessions'
-    if not os.path.exists(keeperPath):
-        os.makedirs(keeperPath)
-    #print(ax2.get_xlim(),ax2.lines,ax2.lines[0].get_xdata())
-    if len(ax2.lines[0].get_xdata()) > 0:
-        keeper = True
-        print('VR Keep ',uId,fname,'t',ax2.get_xlim())
-        #keepUser.append(fname)
-        #keepUserTimeInterval.append(ax2.get_xlim())
-        tInt = ax2.get_xlim()
-        kDf = dfS[ (dfS['time']>=tInt[0]) * (dfS['time']<=tInt[1])]
-        print('keeper dataframe')
-        print(kDf)
-        kDf.to_csv(keeperPath+'/'+fname+'-preprocessed.csv',index=False,na_rep='NA')
-        plt.savefig(keeperPath+'/'+fname+'-viz.pdf')
-        #keeperDfs.append(kDf)
-    else:
-        print('Do not keep')
-        if fname in os.listdir(keeperPath):
-            os.remove(keeperPath+'/'+fname)
-    
-    return keeper, tInt, kDf 
-
-def preprocessSessions(ids,folderParh,fileNames,pars,dfUs,navs,paths,dpaths,fpaths,BBox = None):
-    keepUser = []
-    keepUserTimeInterval = []
-    keeperDfs = []
-    for uId in ids:
-        print('uId',uId)
-        fname = fileNames[uId]
-        print('uId',uId)
-        prepro = False
-        #print(pars["preprocessedVRsession"])
-        if "preprocessedVRsessions" in pars:
-            if fname in pars["preprocessedVRsessions"]:
-                print('pars[uId]',pars["preprocessedVRsessions"][fname])
-                prepro = True
-
-        nav = navs[uId]
-        path= paths[uId]
-        dpath= dpaths[uId]
-        fpath= fpaths[uId]
-        df = dfUs[uId]
-        #print('dpath',dpath)
-        t,x,y,z,dx,dy,dz,fx,fy,fz,n = getSesVars(path,dpath,fpath,nav)
-        plotLines = [x,y,z,dx,dy,dz,fx,fy,fz]
-        lineName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz']
-        
-
-        BBoxTemp = makeBBox([path],[dpath],[fpath])
-        #print(BBoxTemp)
-
-        fig,axA,axB,ax1,ax2 = makeSessionPreproFig(uId, path, dpath, fpath, nav, fname, BBoxTemp, SpanSelector=False)
-
-        # fig = plt.figure(figsize=(16, 12))
-        # axA = fig.add_subplot(2,2,1,projection='3d')
-        # ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
-        # ax2 = fig.add_subplot(2,2,4)
-        # axA,sc = drawPath(path, dpath=dpath, BBox=BBoxTemp,ax=axA)
-        # #axA.set_title('Session '+str(uId)+' file: '+fname)
-        # plt.colorbar(sc, ax=axA)
-
-        # #print(np.isfinite(fpath[:,1]).any())
-        # if np.isfinite(fpath[:,1]).any():
-        #     axB = fig.add_subplot(2,2,2,projection='3d')
-        #     axB,sc = drawPath(fpath, BBox=BBoxTemp,ax=axB)
-        
-        # for l,ln in zip(plotLines,lineName):
-        #     ax1.plot(t,l,label=ln)
-        # #ax1.plot(t,n,label='VR')
-        # ax1.fill_between(t, 0, 1, where=n, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
-        # lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
-        # ax1.set_xlabel('t')
-        # ax1.set_title('Session '+str(uId)+' file: '+fname+'\n'+
-        #                'Press left mouse button and drag \n'+
-        #                'to select a region in the top graph')
-        line2s = []
-        for l,ln in zip(plotLines,lineName):
-            if prepro:
-                t0 = pars["preprocessedVRsessions"][fname]['t0']
-                t1 = pars["preprocessedVRsessions"][fname]['t1']
-                ax1.axvline(t0,  alpha=0.1, color='red')
-                ax1.axvspan(t0,t1, alpha=0.1, color='red')
-                ax1.axvline(t1,  alpha=0.1, color='red')
-                indmin, indmax = np.searchsorted(t, (t0, t1))
-                #print('indmax',len(t), indmax)
-                #if t[indmax] == t1: indmax = indmax+1 
-                #print('indmax',len(t), indmax)
-                indmax = min(len(t), indmax+1)
-                #print('indmax',indmax)
-                line2dx, = ax2.plot(t[indmin:indmax], l[indmin:indmax])
-                ax2.set_xlim(t0, t1)
-            else:
-                line2dx, = ax2.plot([], [])
-                ax2.set_xlim((t[0],t[-1]))
-            line2s.append(line2dx)
-
-
-        def onselect(tmin, tmax):
-            indmin, indmax = np.searchsorted(t, (tmin, tmax))
-            indmax = min(len(t), indmax)
-            region_t = t[indmin:indmax]
-            regions = []
-            for l in plotLines:
-                region_dx = l[indmin:indmax]
-                regions.append(region_dx)
-            if len(region_t) >= 2:
-                for line2dx,region_dx in zip(line2s,regions):
-                    line2dx.set_data(region_t, region_dx)
-                #line2dy.set_data(region_t, region_dy)
-                #line2dz.set_data(region_t, region_dz)
-                ax2.set_xlim(region_t[0], region_t[-1])
-                ax2ymin = np.array(regions).min()
-                ax2ymax = np.array(regions).max()
-                ax2.set_ylim(ax2ymin-0.1, ax2ymax+0.1)
-                fig.canvas.draw_idle()
-                plt.savefig(keeperPath+'/'+fname+'-viz.pdf')
-
-
-
-        span = SpanSelector(
-            ax1,
-            onselect,
-            "horizontal",
-            useblit=True,
-            props=dict(alpha=0.2, facecolor="tab:blue"),
-            interactive=True,
-            drag_from_anywhere=True
-        )
-        plt.savefig(folderParh+'/'+fname+'-viz.pdf')
-        plt.show()
-        keeperPath = folderParh+'-preprocessed-VR-sessions'
-        if not os.path.exists(keeperPath):
-            os.makedirs(keeperPath)
-        #print(ax2.get_xlim(),ax2.lines,ax2.lines[0].get_xdata())
-        if len(ax2.lines[0].get_xdata()) > 0:
-            print('VR Keep ',uId,fname,'t',ax2.get_xlim())
-            keepUser.append(fname)
-            keepUserTimeInterval.append(ax2.get_xlim())
-            tInt = ax2.get_xlim()
-            kDf = df[ (df['time']>=tInt[0]) * (df['time']<=tInt[1])]
-            df.to_csv(keeperPath+'/'+fname+'-preprocessed.csv',index=False,na_rep='NA')
-            print('keeper dataframe')
-            print(kDf)
-            keeperDfs.append(kDf)
-        else:
-            print('Do not keep')
-
-    print("Box",BBox)
-    VRkeepers = {k:{"t0":tInt[0],"t1":tInt[1]} for k,tInt in zip(keepUser,keepUserTimeInterval)}  
-    print("VRkeepers",VRkeepers)  
-    d = {"preprocessedVRsessions":VRkeepers}
-    return d,keeperDfs
-    #with open(file, 'w', encoding='utf-8') as f:
-    #    json.dump(d, f, ensure_ascii=False, indent=4)  
-
 def getVR(dfS):  
     """Gets VR state navigation modality from a session data frames.
     
@@ -1127,6 +808,362 @@ def getVarsFromSession(path,varsNames):
 
     return ids, fileNames,data 
 
+
+def makeRecordPlot(fname, dfS, colName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz'],tstart=None,tend=None):
+    nav = False
+    navAr = False
+    if 'nav' in dfS.columns:
+        time,nav = getVR(dfS).T
+        time,navAr = getAR(dfS).T
+    time = dfS['time']
+    #bbox = makeBBox([path])
+    colVals = [dfS[c].values for c in colName]
+    
+    #fig = plt.figure(figsize=(8, 6))
+    fig, ax1 = plt.subplots(1,1, layout='constrained') #[0.15, 0.11, .85, .89])
+    for l,ln in zip(colVals,colName):
+        ax1.plot(time,l,label=ln)
+    #ax1.plot(t,n,label='VR')
+    print('nav',nav)
+    if len(nav)>0 : ax1.fill_between(time, 0, 1, where=nav, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
+    if len(nav)>0 : ax1.fill_between(time, 0, 1, where=navAr, alpha=0.4, transform=ax1.get_xaxis_transform(),color='aqua',label='AR')
+    ax1.set_xlim((tstart,tend))
+    #lgd = ax1.legend(   bbox_to_anchor=(-0.14,))
+    fig.legend(loc='outside left upper ')
+    return plt,fig
+
+
+def makeSessionPreproFig(uId, path, dpath, fpath, nav, fname, bbox, SpanSelector=False):
+    t,x,y,z,dx,dy,dz,fx,fy,fz,n = getSesVars(path,dpath,fpath,nav)
+    plotLines = [x,y,z,dx,dy,dz,fx,fy,fz]
+    lineName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz']
+
+    fig = plt.figure(figsize=(16, 12))
+    if SpanSelector:
+        plt.title('Press left mouse button and drag \n'+
+                'to select a region in the top graph')
+    axA = fig.add_subplot(2,2,1,projection='3d')
+    ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
+    ax2 = fig.add_subplot(2,2,4)
+    axA,sc = drawPath(path, dpath=dpath, BBox=bbox, ax=axA)
+    #axA.set_title('Session '+str(uId)+' file: '+fname)
+    plt.colorbar(sc, ax=axA)
+
+    #print(np.isfinite(fpath[:,1]).any())
+    if np.isfinite(fpath[:,1]).any():
+        axB = fig.add_subplot(2,2,2,projection='3d')
+        axB,sc = drawPath(fpath, BBox=bbox,ax=axB) 
+    
+    for l,ln in zip(plotLines,lineName):
+        ax1.plot(t,l,label=ln)
+    #ax1.plot(t,n,label='VR')
+    ax1.fill_between(t, 0, 1, where=n, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
+    lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
+    
+    ax1.set_xlabel('t')
+    ax1.set_title('Session '+str(uId)+' file: '+fname)   
+    return fig,axA,axB,ax1,ax2
+
+
+def makeSessionPreproFigPx(uId, path, dpath, fpath, nav, fname, bbox, SpanSelector=False):
+    t,x,y,z,dx,dy,dz,fx,fy,fz,n = getSesVars(path,dpath,fpath,nav)
+    plotLines = [x,y,z,dx,dy,dz,fx,fy,fz]
+    lineName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz']
+
+    fig = plt.figure(figsize=(16, 12))
+    if SpanSelector:
+        plt.title('Press left mouse button and drag \n'+
+                'to select a region in the top graph')
+    axA = fig.add_subplot(2,2,1,projection='3d')
+    ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
+    ax2 = fig.add_subplot(2,2,4)
+    axA,sc = drawPath(path, dpath=dpath, BBox=bbox, ax=axA)
+    #axA.set_title('Session '+str(uId)+' file: '+fname)
+    plt.colorbar(sc, ax=axA)
+
+    #print(np.isfinite(fpath[:,1]).any())
+    if np.isfinite(fpath[:,1]).any():
+        axB = fig.add_subplot(2,2,2,projection='3d')
+        axB,sc = drawPath(fpath, BBox=bbox,ax=axB) 
+    
+    for l,ln in zip(plotLines,lineName):
+        ax1.plot(t,l,label=ln)
+    #ax1.plot(t,n,label='VR')
+    ax1.fill_between(t, 0, 1, where=n, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
+    lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
+    
+    ax1.set_xlabel('t')
+    ax1.set_title('Session '+str(uId)+' file: '+fname)   
+    return fig,axA,axB,ax1,ax2
+
+
+# def preprocessSingleSession2(uId,folderParh,fname,par,dfS,nav,path,dpath,fpath,BBox = None):
+#     BBoxTemp = makeBBox([path],[dpath],[fpath])
+#     #print(BBoxTemp)
+
+#     t,x,y,z,dx,dy,dz,fx,fy,fz,n = getSesVars(path,dpath,fpath,nav)
+#     plotLines = [x,y,z,dx,dy,dz,fx,fy,fz]
+#     lineName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz']
+
+#     # #fig, [[ax3, ax4],[ax1, ax2]] = plt.subplots(2,2, figsize=(10, 10))
+#     # #ax3.set_axis_off()
+#     # #ax4.set_axis_off()
+#     # fig = plt.figure(figsize=(16, 12))
+#     # axA = fig.add_subplot(2,2,1,projection='3d')
+#     # ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
+#     # ax2 = fig.add_subplot(2,2,4)
+
+#     # axA,sc = drawPath(path, dpath=dpath, BBox=BBoxTemp,ax=axA)
+#     # #axA.set_title('Session '+str(uId)+' file: '+fname)
+#     # plt.colorbar(sc, ax=axA)
+
+#     # #print(np.isfinite(fpath[:,1]).any())
+#     # if np.isfinite(fpath[:,1]).any():
+#     #     axB = fig.add_subplot(2,2,2,projection='3d')
+#     #     axB,sc = drawPath(fpath, BBox=BBoxTemp,ax=axB)
+
+#     # for l,ln in zip(plotLines,lineName):
+#     #     ax1.plot(t,l,label=ln)
+#     # #ax1.plot(t,n,label='VR')
+#     # ax1.fill_between(t, 0, 1, where=n, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
+#     # lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
+    
+#     # ax1.set_xlabel('t')
+#     # ax1.set_title('Session '+str(uId)+' file: '+fname)#+'\n'+
+#     #                 #'Press left mouse button and drag \n'+
+#     #                 #'to select a region in the top graph')
+#     fig,axA,axB,ax1,ax2 = makeSessionPreproFig(uId, path, dpath, fpath, nav, fname, BBoxTemp, SpanSelector=False)
+    
+#     # Create the RangeSlider
+#     slider_ax = fig.add_axes([0.20, 0.02, 0.60, 0.03])
+#     if isinstance(par, dict):
+#         t0 = par['t0']
+#         t1 = par['t1']
+#     else:
+#         t0 = t[0]
+#         t1 = t[-1]
+#     slider = RangeSlider(slider_ax, "Time interval", t[0],  t[-1], valinit = (t0,t1) )
+
+#     line2s = []
+#     for l,ln in zip(plotLines,lineName):
+#         if isinstance(par, dict):
+#     #         ax1.axvline(t0,  alpha=0.1, color='red')
+#     #         ax1.axvspan(t0,t1, alpha=0.1, color='red')
+#     #         ax1.axvline(t1,  alpha=0.1, color='red')
+#             indmin, indmax = np.searchsorted(t, (t0, t1))
+#             #print('indmax',len(t), indmax)
+#             #if t[indmax] == t1: indmax = indmax+1 
+#             #print('indmax',len(t), indmax)
+#             indmax = min(len(t), indmax+1)
+#             #print('indmax',indmax)
+#             line2dx, = ax2.plot(t[indmin:indmax], l[indmin:indmax])
+#             ax2.set_xlim(t0, t1)
+#         else:
+#             line2dx, = ax2.plot([], [])
+#             ax2.set_xlim((t[0],t[-1]))
+#         line2s.append(line2dx)
+#     # Create the Vertical lines on the histogram
+#     lower_limit_line = ax1.axvline(slider.val[0], color='r')
+#     span = ax1.axvspan(slider.val[0],slider.val[1], alpha=0.2, color='red')
+#     upper_limit_line = ax1.axvline(slider.val[1], color='r')
+
+#     def update(val):
+#         # The val passed to a callback by the RangeSlider will
+#         # be a tuple of (min, max)
+
+#         ## Update the image's colormap
+#         #im.norm.vmin = val[0]
+#         #im.norm.vmax = val[1]
+
+#         # Update the position of the vertical lines
+#         lower_limit_line.set_xdata([val[0], val[0]])
+#         #span.set_xdata(val[0],val[1], alpha=0.1, color='red')
+#         upper_limit_line.set_xdata([val[1], val[1]])
+    
+#         # appadate span zoom
+#         tmin, tmax = val[0],val[1]
+#         indmin, indmax = np.searchsorted(t, (tmin, tmax))
+#         indmax = min(len(t), indmax)
+#         region_t = t[indmin:indmax]
+#         regions = []
+#         for l in plotLines:
+#             region_dx = l[indmin:indmax]
+#             regions.append(region_dx)
+#         if len(region_t) >= 2:
+#             for line2dx,region_dx in zip(line2s,regions):
+#                 line2dx.set_data(region_t, region_dx)
+#             #line2dy.set_data(region_t, region_dy)
+#             #line2dz.set_data(region_t, region_dz)
+#             ax2.set_xlim(region_t[0], region_t[-1])
+#             ax2ymin = np.array(regions).min()
+#             ax2ymax = np.array(regions).max()
+#             ax2.set_ylim(ax2ymin-0.1, ax2ymax+0.1)
+#         # Redraw the figure to ensure it updates
+#         fig.canvas.draw_idle()
+    
+#     slider.on_changed(update)
+
+#     plt.show()
+#     keeper = False
+#     tInt = None
+#     kDf = None
+#     keeperPath = folderParh+'-preprocessed-VR-sessions'
+#     if not os.path.exists(keeperPath):
+#         os.makedirs(keeperPath)
+#     #print(ax2.get_xlim(),ax2.lines,ax2.lines[0].get_xdata())
+#     if len(ax2.lines[0].get_xdata()) > 0:
+#         keeper = True
+#         print('VR Keep ',uId,fname,'t',ax2.get_xlim())
+#         #keepUser.append(fname)
+#         #keepUserTimeInterval.append(ax2.get_xlim())
+#         tInt = ax2.get_xlim()
+#         kDf = dfS[ (dfS['time']>=tInt[0]) * (dfS['time']<=tInt[1])]
+#         print('keeper dataframe')
+#         print(kDf)
+#         kDf.to_csv(keeperPath+'/'+fname+'-preprocessed.csv',index=False,na_rep='NA')
+#         plt.savefig(keeperPath+'/'+fname+'-viz.pdf')
+#         #keeperDfs.append(kDf)
+#     else:
+#         print('Do not keep')
+#         if fname in os.listdir(keeperPath):
+#             os.remove(keeperPath+'/'+fname)
+    
+#     return keeper, tInt, kDf 
+
+# def preprocessSessions(ids,folderParh,fileNames,pars,dfUs,navs,paths,dpaths,fpaths,BBox = None):
+#     keepUser = []
+#     keepUserTimeInterval = []
+#     keeperDfs = []
+#     for uId in ids:
+#         print('uId',uId)
+#         fname = fileNames[uId]
+#         print('uId',uId)
+#         prepro = False
+#         #print(pars["preprocessedVRsession"])
+#         if "preprocessedVRsessions" in pars:
+#             if fname in pars["preprocessedVRsessions"]:
+#                 print('pars[uId]',pars["preprocessedVRsessions"][fname])
+#                 prepro = True
+
+#         nav = navs[uId]
+#         path= paths[uId]
+#         dpath= dpaths[uId]
+#         fpath= fpaths[uId]
+#         df = dfUs[uId]
+#         #print('dpath',dpath)
+#         t,x,y,z,dx,dy,dz,fx,fy,fz,n = getSesVars(path,dpath,fpath,nav)
+#         plotLines = [x,y,z,dx,dy,dz,fx,fy,fz]
+#         lineName = ['posx','posy','posz','dirx','diry','dirz','fx','fy','fz']
+        
+
+#         BBoxTemp = makeBBox([path],[dpath],[fpath])
+#         #print(BBoxTemp)
+
+#         fig,axA,axB,ax1,ax2 = makeSessionPreproFig(uId, path, dpath, fpath, nav, fname, BBoxTemp, SpanSelector=False)
+
+#         # fig = plt.figure(figsize=(16, 12))
+#         # axA = fig.add_subplot(2,2,1,projection='3d')
+#         # ax1 = fig.add_axes([0.15, 0.11, 0.34, 0.35])
+#         # ax2 = fig.add_subplot(2,2,4)
+#         # axA,sc = drawPath(path, dpath=dpath, BBox=BBoxTemp,ax=axA)
+#         # #axA.set_title('Session '+str(uId)+' file: '+fname)
+#         # plt.colorbar(sc, ax=axA)
+
+#         # #print(np.isfinite(fpath[:,1]).any())
+#         # if np.isfinite(fpath[:,1]).any():
+#         #     axB = fig.add_subplot(2,2,2,projection='3d')
+#         #     axB,sc = drawPath(fpath, BBox=BBoxTemp,ax=axB)
+        
+#         # for l,ln in zip(plotLines,lineName):
+#         #     ax1.plot(t,l,label=ln)
+#         # #ax1.plot(t,n,label='VR')
+#         # ax1.fill_between(t, 0, 1, where=n, alpha=0.4, transform=ax1.get_xaxis_transform(),color='green',label='VR')
+#         # lgd = ax1.legend(bbox_to_anchor=(-0.14,1.))
+#         # ax1.set_xlabel('t')
+#         # ax1.set_title('Session '+str(uId)+' file: '+fname+'\n'+
+#         #                'Press left mouse button and drag \n'+
+#         #                'to select a region in the top graph')
+#         line2s = []
+#         for l,ln in zip(plotLines,lineName):
+#             if prepro:
+#                 t0 = pars["preprocessedVRsessions"][fname]['t0']
+#                 t1 = pars["preprocessedVRsessions"][fname]['t1']
+#                 ax1.axvline(t0,  alpha=0.1, color='red')
+#                 ax1.axvspan(t0,t1, alpha=0.1, color='red')
+#                 ax1.axvline(t1,  alpha=0.1, color='red')
+#                 indmin, indmax = np.searchsorted(t, (t0, t1))
+#                 #print('indmax',len(t), indmax)
+#                 #if t[indmax] == t1: indmax = indmax+1 
+#                 #print('indmax',len(t), indmax)
+#                 indmax = min(len(t), indmax+1)
+#                 #print('indmax',indmax)
+#                 line2dx, = ax2.plot(t[indmin:indmax], l[indmin:indmax])
+#                 ax2.set_xlim(t0, t1)
+#             else:
+#                 line2dx, = ax2.plot([], [])
+#                 ax2.set_xlim((t[0],t[-1]))
+#             line2s.append(line2dx)
+
+
+#         def onselect(tmin, tmax):
+#             indmin, indmax = np.searchsorted(t, (tmin, tmax))
+#             indmax = min(len(t), indmax)
+#             region_t = t[indmin:indmax]
+#             regions = []
+#             for l in plotLines:
+#                 region_dx = l[indmin:indmax]
+#                 regions.append(region_dx)
+#             if len(region_t) >= 2:
+#                 for line2dx,region_dx in zip(line2s,regions):
+#                     line2dx.set_data(region_t, region_dx)
+#                 #line2dy.set_data(region_t, region_dy)
+#                 #line2dz.set_data(region_t, region_dz)
+#                 ax2.set_xlim(region_t[0], region_t[-1])
+#                 ax2ymin = np.array(regions).min()
+#                 ax2ymax = np.array(regions).max()
+#                 ax2.set_ylim(ax2ymin-0.1, ax2ymax+0.1)
+#                 fig.canvas.draw_idle()
+#                 plt.savefig(keeperPath+'/'+fname+'-viz.pdf')
+
+
+
+#         span = SpanSelector(
+#             ax1,
+#             onselect,
+#             "horizontal",
+#             useblit=True,
+#             props=dict(alpha=0.2, facecolor="tab:blue"),
+#             interactive=True,
+#             drag_from_anywhere=True
+#         )
+#         plt.savefig(folderParh+'/'+fname+'-viz.pdf')
+#         plt.show()
+#         keeperPath = folderParh+'-preprocessed-VR-sessions'
+#         if not os.path.exists(keeperPath):
+#             os.makedirs(keeperPath)
+#         #print(ax2.get_xlim(),ax2.lines,ax2.lines[0].get_xdata())
+#         if len(ax2.lines[0].get_xdata()) > 0:
+#             print('VR Keep ',uId,fname,'t',ax2.get_xlim())
+#             keepUser.append(fname)
+#             keepUserTimeInterval.append(ax2.get_xlim())
+#             tInt = ax2.get_xlim()
+#             kDf = df[ (df['time']>=tInt[0]) * (df['time']<=tInt[1])]
+#             df.to_csv(keeperPath+'/'+fname+'-preprocessed.csv',index=False,na_rep='NA')
+#             print('keeper dataframe')
+#             print(kDf)
+#             keeperDfs.append(kDf)
+#         else:
+#             print('Do not keep')
+
+#     print("Box",BBox)
+#     VRkeepers = {k:{"t0":tInt[0],"t1":tInt[1]} for k,tInt in zip(keepUser,keepUserTimeInterval)}  
+#     print("VRkeepers",VRkeepers)  
+#     d = {"preprocessedVRsessions":VRkeepers}
+#     return d,keeperDfs
+#     #with open(file, 'w', encoding='utf-8') as f:
+#     #    json.dump(d, f, ensure_ascii=False, indent=4)  
+
+
 def writeJson(folderPath, pars):
     #print('folderParh',folderParh)
     file = folderPath+'-pars.json'
@@ -1209,6 +1246,34 @@ def write2D_KDE_tojson(kde, BBox, width, recordsFolderName, records, filename, n
 
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(occDict, f, ensure_ascii=False, indent=4)
+
+def write2D_kmeans_KDE_tojson(kde, BBox, width, kmeans, recordsFolderName, records, filename, npoints=800):
+    xedges, yedges, zedges  = makeBinsEdges(BBox,width=.1)
+    Xc, Zc = np.meshgrid((xedges[1:]+xedges[:-1])*0.5, (zedges[1:]+zedges[:-1])*0.5, indexing='xy')
+    xc, zc = Xc.flatten(), Zc.flatten()
+    xz = np.vstack([xc, zc])
+    density = kde(xz)
+
+    densityLTh = 10**-6
+    area = width*width
+    data = np.vstack([ xc[ density*area > densityLTh ], zc[ density*area > densityLTh], density[ density*area > densityLTh]]).T
+    dataSorted = data[data[:,2].argsort()[::-1]]
+    #print('dataSorted',dataSorted.shape,dataSorted.dtype)
+    dataSorted = dataSorted[:npoints]#.astype(np.float16)
+    #print('dataSorted',dataSorted.shape,dataSorted.dtype)
+    labels = kmeans.predict(dataSorted[:,:2])
+    #print(labels,labels.shape,data.shape)
+    #print(np.unique(labels))
+
+    dataOcc = []
+    for cl in range(kmeans.n_clusters):
+        dataSortedCl=[[x,z,o] for l,(x,z,o) in zip(labels,dataSorted) if l == cl]
+        dataOcc.append( { 'cluster':cl,  'points' : [{'x':x,'z':z,'density':o} for x,z,o in dataSortedCl] })
+    occDict = {'records folder':recordsFolderName,'records':records,'bbox':BBox,'voxelsize':width,'clusters':dataOcc}
+    
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(occDict, f, ensure_ascii=False, indent=4)
+    return occDict
 
 def dir_path(string):
     if os.path.isdir(string):
