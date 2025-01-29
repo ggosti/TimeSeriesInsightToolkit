@@ -1,0 +1,157 @@
+# swagger.yml
+
+openapi: "3.0.0"
+info:
+  title: "Time Series Insight Toolkit Flask REST API"
+  description: "An API for records fram capture events"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+paths:
+  /steps:
+    get:
+      operationId: server.get_steps
+      responses:
+        '200':
+          description: Get all steps
+  /projects:
+    get:
+      operationId: server.get_projects
+      responses:
+        '200':
+          description: Get all projects
+  /groups:
+    get:
+      operationId: server.get_groups
+      responses:
+        '200':
+          description: Get all groups.
+  /records:
+    get:
+      operationId: server.get_records
+      responses:
+        '200':
+          description: Get all records.
+  # /steps/{step_name}/events/{event_name}/groups/{group_name}/records:
+  #   get:
+  #     operationId: views.get_group_records
+  #     parameters:
+  #       - name: step_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: event_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: group_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: Get a list of records for a specific group in a step and event
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/Aggregate'
+  # /steps/{step_name}/events/{event_name}/groups/{group_name}/{version}/{record_name}:
+  #   get:
+  #     operationId: views.get_group_record
+  #     parameters:
+  #       - name: step_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: event_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: group_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: version
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: record_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: An record version in a group
+  # /steps/{step_name}/events/{event_name}/groups/{group_name}/aggregates:
+  #   get:
+  #     operationId: views.get_group_aggregates
+  #     parameters:
+  #       - name: step_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: event_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: group_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: A list of aggregates for a group
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/Record'
+  # /steps/{step_name}/events/{event_name}/groups/{group_name}/{aggregate_name}:
+  #   get:
+  #     operationId: views.get_group_aggregate
+  #     parameters:
+  #       - name: step_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: event_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: group_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: aggregate_name
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: An aggregates for recods in a group
+  #         # content:
+  #         #   application/json:
+  #         #     schema:
+  #         #       type: array
+  #         #       items:
+  #         #         $ref: '#/components/schemas/Record'
