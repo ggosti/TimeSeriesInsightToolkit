@@ -1307,7 +1307,6 @@ def make_panoramic_kde(xConc,zConc,yConc,bbox,pathSes,pathOut,fileNames,binSize 
 def  make_3d_kde(xConc,zConc,yConc,bbox,pathSes,pathOut,fileNames,th=0.1,width=0.1,write=False,prefix='pos'):
     xyz = np.vstack([xConc,yConc,zConc])
     kde = stats.gaussian_kde(xyz)
-    #density = kde(xyz)
 
     xedges, yedges, zedges  = makeBinsEdges(bbox,width)
 
@@ -1315,6 +1314,7 @@ def  make_3d_kde(xConc,zConc,yConc,bbox,pathSes,pathOut,fileNames,th=0.1,width=0
     xc, yc, zc = Xc.flatten(), Yc.flatten(), Zc.flatten()
     xyz = np.vstack([xc, yc, zc])
     density = kde(xyz)
+    print('density 3d',density,density.shape,density.min(),density.max())
 
 
     # y-up
@@ -1331,7 +1331,6 @@ def  make_3d_kde(xConc,zConc,yConc,bbox,pathSes,pathOut,fileNames,th=0.1,width=0
     ax.set_title('3D kde')
     plt.savefig('3d-kde.png')
 
-    
 
     if write:
         kdefname = '/'+prefix+'-3d-kde.json'
@@ -1342,13 +1341,15 @@ def  make_3d_kde(xConc,zConc,yConc,bbox,pathSes,pathOut,fileNames,th=0.1,width=0
 def make_2d_kde(xConc,zConc,bbox, pathSes, pathOut,fileNames, th=0.1, width=0.1,write=False):
     xz = np.vstack([xConc,zConc])
     kde = stats.gaussian_kde(xz)
-    #density = kde(xz)
     
     xedges, yedges, zedges  = makeBinsEdges(bbox,width)
+
     Xc, Zc = np.meshgrid((xedges[1:]+xedges[:-1])*0.5, (zedges[1:]+zedges[:-1])*0.5, indexing='xy')
     xc, zc = Xc.flatten(), Zc.flatten()
     xz = np.vstack([xc, zc])
     density = kde(xz)
+    print('density 2d',density,density.shape,density.min(),density.max())
+
     f = np.reshape(density.T, Xc.shape)
 
     fig = plt.figure()

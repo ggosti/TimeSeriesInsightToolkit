@@ -25,9 +25,9 @@ if __name__ == "__main__":
     print('path',args.path)
 
     proj2d = args.proj2d
-    print('proj2d',proj2d)
+    print('proj2d', proj2d)
     proj3d = args.proj3d
-    print('proj3d',proj3d)
+    print('proj3d', proj3d)
 
     dir = args.dir
     print('dir',dir)
@@ -99,7 +99,7 @@ if __name__ == "__main__":
                 tsi.make_panoramic_kde(xConc,zConc,yConc,bbox,pathSes,pathOut,fileNames)
         else:
             #print('3d kde')
-            tsi.make_3d_kde(xConc,zConc,yConc,bbox,pathSes,pathOut, fileNames, th=0.01,width=width,write=True)
+            tsi.make_3d_kde(xConc,zConc,yConc,bbox,pathSes,pathOut, fileNames, th=0.000001,width=width,write=True)
 
     if proj2d:
         #--------------------------
