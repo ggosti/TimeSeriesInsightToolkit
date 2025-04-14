@@ -42,15 +42,12 @@ if __name__ == "__main__":
     pathOut = args.opath
     print('input',pathSes)
     print('output',pathOut)
-    #ids, fileNames, dfSs, df = ma.readData(pathSes)
-    ids, fileNames, [paths,dpaths,fpaths] = tsi.getVarsFromSession(pathSes,['pos','dir','f'])
-
-    #dpaths = ma.getVarsFromSession(pathSes,['dir'])
-    #fpaths = ma.getVarsFromSession(pathSes,['f'])
-    #print('paths',paths[0][0].shape)
-    #print('paths',np.vstack(paths).T)
-    #print('fpaths',fpaths)
-    bbox = tsi.makeBBox(paths,dpaths,fpaths)
+    if False:
+        ids, fileNames, [paths,dpaths,fpaths] = tsi.getVarsFromSession(pathSes,['pos','dir','f'])
+        bbox = tsi.makeBBox(paths,dpaths,fpaths)
+    else:
+        ids, fileNames, [paths,dpaths] = tsi.getVarsFromSession(pathSes,['pos','dir'])
+        bbox = tsi.makeBBox(paths,dpaths,dpaths)#,fpaths)
     print('bbox',bbox)
     #print(len(paths))
 
@@ -69,11 +66,12 @@ if __name__ == "__main__":
         if i < 5:
             tsi.drawPath(path,dpath,BBox=bbox)#,ax=ax2)
 
-    if np.isnan(fpaths[0]).all():
-        f,axs = plt.subplots( math.ceil(len(paths)/ncols), 4, sharex=True, sharey=True )
-        for uId,ax in zip(ids,axs.flat):
-            fpath = fpaths[uId] #ts[uId],xs[uId],ys[uId],zs[uId]
-            tsi.drawPath2DT(fpath,BBox=bbox,ax=ax,yup=True)
+    if False:
+        if np.isnan(fpaths[0]).all():
+            f,axs = plt.subplots( math.ceil(len(paths)/ncols), 4, sharex=True, sharey=True )
+            for uId,ax in zip(ids,axs.flat):
+                fpath = fpaths[uId] #ts[uId],xs[uId],ys[uId],zs[uId]
+                tsi.drawPath2DT(fpath,BBox=bbox,ax=ax,yup=True)
 
     tsi.allPaths3D(paths)
 

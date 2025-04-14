@@ -1029,10 +1029,11 @@ def getPath(dfS,listCols = ['posx','posy','posz']):
         Array of navigation
     """
 
-    assert (('Time' in dfS.columns) or ('time' in dfS.columns))  , "neither Time or time in csv columns: "+dfU.columns
-    timeCol = 'Time'
-    if not 'Time' in dfS.columns:
-        timeCol = 'time'
+    columns = [strCol.lower() for strCol in dfS.columns]
+    assert ( ('time' in columns) or ('t' in columns) ) , "neither Time or time in csv columns: "+dfS.columns
+    timeCol = 'time'
+    if not 'time' in columns:
+        timeCol = 't' 
 
     t =  dfS[timeCol].values
     path = np.zeros((len(t),len(listCols)+1))
