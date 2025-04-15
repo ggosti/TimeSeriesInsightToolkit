@@ -561,7 +561,7 @@ def readDataPars(pathDir,fileNames):
             json.dump(d, f, ensure_ascii=False, indent=4)
     return d
 
-def makeBBox(paths,dpaths,fpaths):
+def makeBBox(paths,dpaths = None, fpaths=None):
     """get lists paths,dpaths,fpaths and compute bounding box.
 
     Parameters:
@@ -572,8 +572,8 @@ def makeBBox(paths,dpaths,fpaths):
     """
     #_,n = np.vstack(navs).T
     _,x,y,z = np.vstack(paths).T
-    _,u,v,w = np.vstack(dpaths).T
-    _,fx,fy,fz = np.vstack(fpaths).T
+    if isinstance(dpaths,list): _,u,v,w = np.vstack(dpaths).T
+    if isinstance(dpaths,list): _,fx,fy,fz = np.vstack(fpaths).T
     #print('x',np.nanmin(x),np.nanmax(x))
     #print('u',np.nanmin(u),np.nanmax(u))
     if np.isnan(fx).all():
@@ -1110,12 +1110,12 @@ def getVarsFromSession(path,varsNames):
             data.append(getVRs(ids,dfSs)) #[ma.getVR(dfSs[uId]) for  uId in ids]
         elif varN == 'pos':
             paths=getPaths(ids,dfSs,['posx','posy','posz'])
-            _,x,y,z = np.vstack(paths).T
+            #_,x,y,z = np.vstack(paths).T
             #print('x',np.nanmin(x),np.nanmax(x))
             data.append(paths)   
         elif varN == 'dir':
             dpaths = getPaths(ids,dfSs,['dirx','diry','dirz'])
-            _,u,v,w = np.vstack(dpaths).T
+            #_,u,v,w = np.vstack(dpaths).T
             #print('u',np.nanmin(u),np.nanmax(u))
             data.append(dpaths)
         elif varN == 'f':
@@ -1168,15 +1168,16 @@ def writeOccupancy_tojson(H, BBox, width, recordsFolderName, records, filename):
 # kde utilities
 #-----------------------------
 
-def writeKDE_tojson(kde, BBox, width, recordsFolderName, records, filename, npoints=800):
+def writeKDE_tojson(kde, BBox, width, recordsFolderName, records, filename, npoints=3200, densityLTh = 10**-6):
     xedges, yedges,zedges = makeBinsEdges(BBox,width)
     Xc, Yc, Zc = np.meshgrid((xedges[1:]+xedges[:-1])*0.5,(yedges[1:]+yedges[:-1])*0.5, (zedges[1:]+zedges[:-1])*0.5, indexing='xy')
     xc, yc, zc = Xc.flatten(), Yc.flatten(), Zc.flatten() 
 
     xyz = np.vstack([xc, yc, zc])
     density = kde(xyz)
+    print('density 3d',density,density.shape,'min',density.min(),'max',density.max(), 'densityLTh',densityLTh)
 
-    densityLTh = 10**-6
+    #densityLTh = 10**-6
     volume = width*width*width
     data = np.vstack([ xc[ density*volume > densityLTh ], yc[ density*volume > densityLTh ], zc[ density*volume > densityLTh], density[ density*volume > densityLTh]]).T
     dataSorted = data[data[:,3].argsort()[::-1]]
@@ -1184,20 +1185,32 @@ def writeKDE_tojson(kde, BBox, width, recordsFolderName, records, filename, npoi
     dataSorted = dataSorted[:npoints]#.astype(np.float16)
     #print('dataSorted',dataSorted.shape,dataSorted.dtype)
 
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    sc = ax.scatter(dataSorted[:,0], dataSorted[:,2], dataSorted[:,1], c=dataSorted[:,3],s=1)
+    #fig.colorbar(sc, ax=ax)
+    ax.set_xlabel('x')
+    ax.set_ylabel('z')
+    ax.set_zlabel('y')
+    ax.set_xlim((xedges[0],xedges[-1]))
+    ax.set_zlim((yedges[0],yedges[-1]))
+    ax.set_ylim((zedges[0],zedges[-1]))
+    ax.set_title('3D kde json')
+
     dataOcc = [{'x':x,'y':y,'z':z,'density':o} for x,y,z,o in dataSorted ]
     occDict = {'records folder':recordsFolderName,'records':records,'bbox':BBox,'voxelsize':width,'points':dataOcc}
 
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(occDict, f, ensure_ascii=False, indent=4)
 
-def write2D_KDE_tojson(kde, BBox, width, recordsFolderName, records, filename, npoints=800):
+def write2D_KDE_tojson(kde, BBox, width, recordsFolderName, records, filename, npoints=3200, densityLTh = 10**-6):
     xedges, yedges, zedges  = makeBinsEdges(BBox,width=.1)
     Xc, Zc = np.meshgrid((xedges[1:]+xedges[:-1])*0.5, (zedges[1:]+zedges[:-1])*0.5, indexing='xy')
     xc, zc = Xc.flatten(), Zc.flatten()
     xz = np.vstack([xc, zc])
     density = kde(xz)
 
-    densityLTh = 10**-6
+    
     area = width*width
     data = np.vstack([ xc[ density*area > densityLTh ], zc[ density*area > densityLTh], density[ density*area > densityLTh]]).T
     dataSorted = data[data[:,2].argsort()[::-1]]
@@ -1314,7 +1327,9 @@ def  make_3d_kde(xConc,zConc,yConc,bbox,pathSes,pathOut,fileNames,th=0.1,width=0
     xc, yc, zc = Xc.flatten(), Yc.flatten(), Zc.flatten()
     xyz = np.vstack([xc, yc, zc])
     density = kde(xyz)
-    print('density 3d',density,density.shape,density.min(),density.max())
+    print('density 3d',density,density.shape,'min',density.min(),'max',density.max(), 'th', th)
+    thrDensity = density[density>th]    
+    print('density 3d',thrDensity.shape,'min',thrDensity.min(),'max',thrDensity.max())
 
 
     # y-up
@@ -1336,7 +1351,8 @@ def  make_3d_kde(xConc,zConc,yConc,bbox,pathSes,pathOut,fileNames,th=0.1,width=0
         kdefname = '/'+prefix+'-3d-kde.json'
         #if not 'pos' in prefix:
         #    kdefname = '/dir-3d-kde.json'
-        writeKDE_tojson(kde, bbox, width=width, recordsFolderName=pathSes, records=fileNames, filename=pathOut+kdefname)
+        print('saving kde 3D to json',pathOut+kdefname)
+        writeKDE_tojson(kde, bbox, width=width, densityLTh =th, recordsFolderName=pathSes, records=fileNames, filename=pathOut+kdefname)
 
 def make_2d_kde(xConc,zConc,bbox, pathSes, pathOut,fileNames, th=0.1, width=0.1,write=False):
     xz = np.vstack([xConc,zConc])
@@ -1369,7 +1385,8 @@ def make_2d_kde(xConc,zConc,bbox, pathSes, pathOut,fileNames, th=0.1, width=0.1,
         kdefname = '/pos-2d-kde.json'
         if dir == True:
             kdefname = '/dir-2d-kde.json'
-        write2D_KDE_tojson(kde, bbox, width=width, recordsFolderName=pathSes, records=fileNames, filename=pathOut+kdefname)
+        print('saving kde 2D to json',pathOut+kdefname)
+        write2D_KDE_tojson(kde, bbox, width=width, densityLTh = 10**-6, recordsFolderName=pathSes, records=fileNames, filename=pathOut+kdefname)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process tracks from immersive and not-immersive explorations of Aton 3D models which were captured with Merkhet.')

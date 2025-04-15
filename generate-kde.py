@@ -19,7 +19,7 @@ if __name__ == "__main__":
     parser.add_argument('--proj2d', action='store_true', help='Generete 2D kde.')
     parser.add_argument('--panoramic', action='store_true', help='Use for panoramic scene.')
     parser.add_argument('--width', type=float, default=0.4, help='Set discretization width.')
-    parser.set_defaults(proj3d=True, proj2d=False,dir=False,panoramic=False)
+    parser.set_defaults(proj3d=False, proj2d=False,dir=False,panoramic=False)
 
     args = parser.parse_args()
     print('path',args.path)
@@ -42,14 +42,15 @@ if __name__ == "__main__":
     pathOut = args.opath
     print('input',pathSes)
     print('output',pathOut)
-    if False:
-        ids, fileNames, [paths,dpaths,fpaths] = tsi.getVarsFromSession(pathSes,['pos','dir','f'])
-        bbox = tsi.makeBBox(paths,dpaths,fpaths)
-    else:
-        ids, fileNames, [paths,dpaths] = tsi.getVarsFromSession(pathSes,['pos','dir'])
-        bbox = tsi.makeBBox(paths,dpaths,dpaths)#,fpaths)
-    print('bbox',bbox)
-    #print(len(paths))
+
+
+    ids, fileNames, dfSs, df = tsi.readData(pathSes)
+    paths = tsi.getPaths(ids,dfSs,['posx','posy','posz'])
+    bbox = tsi.makeBBox(paths,paths,paths)
+    
+    dpaths = tsi.getPaths(ids,dfSs,['dirx','diry','dirz'])
+    bbox = tsi.makeBBox(paths,dpaths,dpaths) #,fpaths)
+    
 
     ncols = 4
     f,axs = plt.subplots( math.ceil(len(paths)/ncols), 4, sharex=True, sharey=True )
@@ -119,7 +120,7 @@ if __name__ == "__main__":
         #plt.figure()
         #plt.scatter(xConc,zConc,c=density,s=1)
 
-        tsi.make_2d_kde(xConc,zConc,bbox, pathSes, pathOut, fileNames, th=0.01, width=width)
+        tsi.make_2d_kde(xConc,zConc,bbox, pathSes, pathOut, fileNames, th=0.0001, width=width, write=True)
 
 
 
